@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#0b1720">
+<title>Mega Millions AI Lab</title>
+
+<style>
+:root{
+  --bg:#0b1720;
+  --card:#14252b;
+  --card2:#102027;
+  --text:#f4f7f5;
+  --muted:#9fb3b6;
+  --accent:#f5c542;
+  --accent2:#20c7a6;
+  --success:#39d98a;
+  --danger:#ff6b6b;
+  --border:#294047;
+  --whiteball:#f8faf9;
+  --megaball:#f5c542;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+}
+
+body{
+  min-height:100vh;
+}
+
+.container{
+  width:100%;
+  max-width:760px;
+  margin:auto;
+  padding:14px;
+}
+
+header{
+  text-align:center;
+  padding:8px 0 14px;
+}
+
+h1{
+  margin:0;
+  font-size:26px;
+  font-weight:800;
+  letter-spacing:-.5px;
+}
+
+.subtitle{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:4px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:14px;
+  margin-bottom:12px;
+  box-shadow:0 5px 18px rgba(0,0,0,.12);
+}
+
+.card h2{
+  margin:0 0 10px;
+  font-size:15px;
+}
+
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+}
+
+.jackpot-label{
+  color:var(--accent);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.jackpot{
+  font-size:34px;
+  font-weight:900;
+  margin:3px 0 3px;
+}
+
+.cash{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.info-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:13px;
+}
+
+.info-box{
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:9px;
+}
+
+.info-label{
+  font-size:10px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.6px;
+}
+
+.info-value{
+  margin-top:3px;
+  font-size:14px;
+  font-weight:750;
+}
+
+.draw{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:9px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.draw:last-child{
+  border-bottom:0;
+}
+
+.draw-date{
+  color:var(--muted);
+  font-size:12px;
+  min-width:92px;
+}
+
+.balls{
+  display:flex;
+  gap:4px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.ball{
+  width:27px;
+  height:27px;
+  border-radius:50%;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--whiteball);
+  color:#162127;
+  font-size:11px;
+  font-weight:850;
+  box-shadow:inset 0 -2px 0 rgba(0,0,0,.15);
+}
+
+.ball.mega{
+  background:var(--megaball);
+  color:#332600;
+}
+
+.stat-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+}
+
+.stat{
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+}
+
+.stat-value{
+  font-size:18px;
+  font-weight:800;
+  margin-top:3px;
+}
+
+label{
+  color:var(--muted);
+  font-size:12px;
+}
+
+select,input{
+  width:100%;
+  margin-top:5px;
+  background:#0c1a21;
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:10px;
+  font-size:13px;
+  outline:none;
+}
+
+button{
+  border:0;
+  border-radius:9px;
+  padding:10px 12px;
+  background:var(--accent);
+  color:#211b05;
+  font-weight:800;
+  font-size:12px;
+  cursor:pointer;
+}
+
+button.secondary{
+  background:#21353b;
+  color:var(--text);
+  border:1px solid var(--border);
+}
+
+button.green{
+  background:var(--accent2);
+  color:#06251f;
+}
+
+button.danger{
+  background:#45262a;
+  color:#ffb0b0;
+  border:1px solid #69383d;
+}
+
+.action-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:10px;
+}
+
+.checkbox-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:9px 0;
+}
+
+.checkbox-row input{
+  width:auto;
+  margin:0;
+}
+
+.table-wrap{
+  overflow-x:auto;
+  border:1px solid var(--border);
+  border-radius:9px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:11px;
+}
+
+th,td{
+  padding:8px;
+  border-bottom:1px solid var(--border);
+  text-align:left;
+  white-space:nowrap;
+}
+
+th{
+  color:var(--muted);
+  font-weight:700;
+}
+
+.progress{
+  height:7px;
+  background:#0a171d;
+  border-radius:99px;
+  overflow:hidden;
+  margin-top:7px;
+}
+
+.progress-bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  transition:width .25s;
+}
+
+.ticket-list{
+  display:grid;
+  gap:7px;
+}
+
+.ticket{
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:9px;
+}
+
+.ticket-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:5px;
+}
+
+.ticket-name{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.ticket-balls{
+  display:flex;
+  gap:4px;
+  flex-wrap:wrap;
+}
+
+.save-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+}
+
+.small{
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.45;
+}
+
+.result-good{
+  color:var(--success);
+  font-weight:800;
+}
+
+.result-bad{
+  color:var(--danger);
+  font-weight:800;
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  background:#12262c;
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px 14px;
+  font-size:12px;
+  display:none;
+  z-index:999;
+  box-shadow:0 8px 25px rgba(0,0,0,.35);
+}
+
+footer{
+  text-align:center;
+  color:#71878b;
+  font-size:10px;
+  padding:6px 10px 20px;
+  line-height:1.5;
+}
+
+@media(max-width:430px){
+  .container{padding:10px}
+  .card{padding:12px}
+  h1{font-size:23px}
+  .jackpot{font-size:30px}
+  .ball{
+    width:25px;
+    height:25px;
+    font-size:10px;
+  }
+  .draw-date{
+    min-width:80px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+  <h1>Mega Millions AI Lab</h1>
+  <div class="subtitle">
+    Version 1 • Statistics • Strategies • Backtesting
+  </div>
+</header>
+
+<!-- JACKPOT -->
+<section class="card">
+  <div class="jackpot-label">CURRENT ESTIMATED JACKPOT</div>
+  <div class="jackpot" id="jackpot">$—</div>
+  <div class="cash">
+    Cash Value: <span id="cashValue">—</span>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-box">
+      <div class="info-label">Next Drawing</div>
+      <div class="info-value" id="nextDrawing">—</div>
+    </div>
+
+    <div class="info-box">
+      <div class="info-label">Ticket Cost</div>
+      <div class="info-value">$5 / Play</div>
+    </div>
+  </div>
+</section>
+
+<!-- LATEST DRAWINGS -->
+<section class="card">
+  <div class="section-title">
+    <h2>Latest Drawings</h2>
+    <span class="small" id="drawCountLabel">0 draws</span>
+  </div>
+
+  <div id="latestDrawings"></div>
+</section>
+
+<!-- STATISTICS -->
+<section class="card">
+  <div class="section-title">
+    <h2>Statistics</h2>
+    <span class="small">Selected history</span>
+  </div>
+
+  <label>
+    Analysis Window
+    <select id="statsWindow">
+      <option value="20">Last 20</option>
+      <option value="30" selected>Last 30</option>
+      <option value="50">Last 50</option>
+      <option value="100">Last 100</option>
+      <option value="200">Last 200</option>
+      <option value="500">Last 500</option>
+      <option value="all">All</option>
+    </select>
+  </label>
+
+  <div class="stat-grid" style="margin-top:9px">
+    <div class="stat">
+      <div class="stat-label">Drawings</div>
+      <div class="stat-value" id="statDrawings">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Most Frequent</div>
+      <div class="stat-value" id="statHot">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Least Frequent</div>
+      <div class="stat-value" id="statCold">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Average Sum</div>
+      <div class="stat-value" id="statAverage">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Odd / Even</div>
+      <div class="stat-value" id="statOddEven">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">High / Low</div>
+      <div class="stat-value" id="statHighLow">—</div>
+    </div>
+  </div>
+
+  <div style="margin-top:12px">
+    <div class="small">Top white-ball frequency</div>
+    <div id="frequencyTable" style="margin-top:6px"></div>
+  </div>
+
+  <div style="margin-top:12px">
+    <div class="small">Mega Ball frequency</div>
+    <div id="megaFrequencyTable" style="margin-top:6px"></div>
+  </div>
+</section>
+
+<!-- STRATEGY ANALYSIS -->
+<section class="card">
+  <div class="section-title">
+    <h2>Strategy Analysis</h2>
+    <span class="small">Historical simulation</span>
+  </div>
+
+  <label>
+    Strategy History
+    <select id="strategyWindow">
+      <option value="20">Last 20</option>
+      <option value="30" selected>Last 30</option>
+      <option value="50">Last 50</option>
+      <option value="100">Last 100</option>
+      <option value="200">Last 200</option>
+      <option value="500">Last 500</option>
+      <option value="all">All</option>
+    </select>
+  </label>
+
+  <div class="action-row">
+    <button class="green" onclick="runStrategyAnalysis()">Run Analysis</button>
+  </div>
+
+  <div id="strategyResults" style="margin-top:10px"></div>
+</section>
+
+<!-- TICKET GENERATOR -->
+<section class="card">
+  <div class="section-title">
+    <h2>AI Ticket Generator</h2>
+    <span class="small">5 + Mega Ball</span>
+  </div>
+
+  <label>
+    Strategy
+    <select id="strategy">
+      <option value="hybrid">Hybrid AI</option>
+      <option value="frequency">Hot / Frequency</option>
+      <option value="cold">Cold Numbers</option>
+      <option value="overdue">Overdue</option>
+      <option value="balanced">Balanced</option>
+      <option value="pairs">Pair Based</option>
+      <option value="random">Random</option>
+    </select>
+  </label>
+
+  <label style="display:block;margin-top:8px">
+    Number of Tickets
+    <select id="ticketCount">
+      <option value="1">1</option>
+      <option value="3" selected>3</option>
+      <option value="5">5</option>
+      <option value="10">10</option>
+    </select>
+  </label>
+
+  <div class="action-row">
+    <button onclick="generateTickets()">Generate Tickets</button>
+    <button class="secondary" onclick="clearTickets()">Clear</button>
+  </div>
+
+  <div id="ticketResults" class="ticket-list" style="margin-top:10px"></div>
+</section>
+
+<!-- SAVED NUMBERS -->
+<section class="card">
+  <div class="section-title">
+    <h2>Saved Numbers</h2>
+    <span class="small">Save generated or manual tickets</span>
+  </div>
+
+  <div class="save-row">
+    <input id="manualWhite"
+           placeholder="White balls: 1,2,3,4,5">
+    <input id="manualMega"
+           placeholder="Mega Ball">
+  </div>
+
+  <div class="action-row">
+    <button class="green" onclick="saveManualTicket()">Save Manual</button>
+    <button class="secondary" onclick="saveGeneratedTickets()">Save Generated</button>
+    <button class="danger" onclick="clearSavedTickets()">Clear Saved</button>
+  </div>
+
+  <div id="savedTickets" class="ticket-list" style="margin-top:10px"></div>
+</section>
+
+<!-- BACKTESTING -->
+<section class="card">
+  <div class="section-title">
+    <h2>Backtesting</h2>
+    <span class="small">Historical performance</span>
+  </div>
+
+  <label>
+    Test Strategy
+    <select id="backtestStrategy">
+      <option value="hybrid">Hybrid AI</option>
+      <option value="frequency">Hot / Frequency</option>
+      <option value="cold">Cold Numbers</option>
+      <option value="overdue">Overdue</option>
+      <option value="balanced">Balanced</option>
+      <option value="pairs">Pair Based</option>
+      <option value="random">Random</option>
+    </select>
+  </label>
+
+  <label style="display:block;margin-top:8px">
+    Test Window
+    <select id="backtestWindow">
+      <option value="20">Last 20</option>
+      <option value="30" selected>Last 30</option>
+      <option value="50">Last 50</option>
+      <option value="100">Last 100</option>
+      <option value="200">Last 200</option>
+      <option value="500">Last 500</option>
+      <option value="all">All</option>
+    </select>
+  </label>
+
+  <div class="action-row">
+    <button class="green" onclick="runBacktest()">Run Backtest</button>
+  </div>
+
+  <div id="backtestResults" style="margin-top:10px"></div>
+</section>
+
+<!-- AUTO UPDATE -->
+<section class="card">
+  <h2>Automatic Update</h2>
+
+  <label>
+    Cloudflare Worker URL
+    <input id="workerUrl"
+      value="https://megamillion-ai-lab.jsiho75.workers.dev/“>
+  </label>
+
+  <div class="checkbox-row">
+    <input type="checkbox" id="autoUpdate">
+    <label for="autoUpdate">
+      Automatically update every time the app opens or returns to foreground
+    </label>
+  </div>
+
+  <div class="action-row">
+    <button class="green" onclick="updateFromWorker()">Update Now</button>
+    <button class="secondary" onclick="saveSettings()">Save Settings</button>
+  </div>
+
+  <div class="small" id="updateStatus" style="margin-top:8px">
+    Local database ready.
+  </div>
+</section>
+
+<!-- DATA TOOLS -->
+<section class="card">
+  <h2>Data Tools</h2>
+
+  <div class="action-row">
+    <button onclick="exportCSV()">Export CSV</button>
+    <button onclick="exportJSON()">Export JSON</button>
+    <button class="secondary" onclick="document.getElementById('csvImport').click()">
+      Import CSV
+    </button>
+    <button class="danger" onclick="resetDatabase()">
+      Reset Historical Database
+    </button>
+  </div>
+
+  <input
+    id="csvImport"
+    type="file"
+    accept=".csv,text/csv"
+    style="display:none"
+    onchange="importCSV(event)"
+  >
+</section>
+
+<footer>
+  Mega Millions AI Lab V1<br>
+  Statistical analysis only. Lottery drawings are random.
+  Historical patterns do not guarantee future results.
+</footer>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+"use strict";
+
+/* =========================================================
+   MEGA MILLIONS AI LAB V1
+   ========================================================= */
+
+const STORAGE_KEY="mega_millions_ai_lab_draws_v1";
+const SETTINGS_KEY="mega_millions_ai_lab_settings_v1";
+const SAVED_KEY="mega_millions_ai_lab_saved_v1";
+
+const GAME={
+  whiteMax:70,
+  currentMegaMax:24,
+  historicalMegaMax:25,
+  ticketCost:5,
+  historyStart:"2010-01-01",
+  newGameDate:"2025-04-08"
+};
+
+let history=[];
+let savedTickets=[];
+
+const $=id=>document.getElementById(id);
+
+/* =========================================================
+   SAMPLE DATA
+   ========================================================= */
+
+const SEED_DRAWS=[
+  {date:"2026-07-28",white:[34,48,49,59,70],mb:12},
+  {date:"2026-07-24",white:[2,5,42,44,60],mb:1},
+  {date:"2026-07-21",white:[14,18,31,38,46],mb:22},
+  {date:"2026-07-17",white:[11,26,35,47,64],mb:12},
+  {date:"2026-07-14",white:[7,21,29,50,63],mb:9},
+  {date:"2026-07-10",white:[3,17,28,55,68],mb:20},
+  {date:"2026-07-07",white:[12,23,37,41,66],mb:4},
+  {date:"2026-07-03",white:[5,16,34,45,61],mb:18},
+  {date:"2026-06-30",white:[8,19,27,53,69],mb:7},
+  {date:"2026-06-26",white:[1,25,32,48,57],mb:23}
+];
+
+/* =========================================================
+   INIT
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded",()=>{
+  loadData();
+  loadSettings();
+  loadSavedTickets();
+
+  renderAll();
+
+  if($("autoUpdate").checked){
+    updateFromWorker(true);
+  }
+});
+
+document.addEventListener("visibilitychange",()=>{
+  if(!document.hidden && $("autoUpdate").checked){
+    updateFromWorker(true);
+  }
+});
+
+/* =========================================================
+   STORAGE
+   ========================================================= */
+
+function loadData(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+
+    if(raw){
+      history=JSON.parse(raw);
+    }else{
+      history=SEED_DRAWS.map(normalizeDraw);
+      saveData();
+    }
+  }catch(e){
+    history=SEED_DRAWS.map(normalizeDraw);
+  }
+
+  history=dedupeDraws(history);
+  history.sort((a,b)=>new Date(b.date)-new Date(a.date));
+}
+
+function saveData(){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(history));
+}
+
+function loadSettings(){
+  try{
+    const raw=localStorage.getItem(SETTINGS_KEY);
+
+    if(!raw)return;
+
+    const s=JSON.parse(raw);
+
+    if(s.workerUrl){
+      $("workerUrl").value=s.workerUrl;
+    }
+
+    $("autoUpdate").checked=!!s.autoUpdate;
+  }catch(e){}
+}
+
+function saveSettings(){
+  const settings={
+    workerUrl:$("workerUrl").value.trim(),
+    autoUpdate:$("autoUpdate").checked
+  };
+
+  localStorage.setItem(
+    SETTINGS_KEY,
+    JSON.stringify(settings)
+  );
+
+  toast("Settings saved");
+}
+
+function loadSavedTickets(){
+  try{
+    const raw=localStorage.getItem(SAVED_KEY);
+    savedTickets=raw?JSON.parse(raw):[];
+  }catch(e){
+    savedTickets=[];
+  }
+
+  renderSavedTickets();
+}
+
+function saveSavedTickets(){
+  localStorage.setItem(
+    SAVED_KEY,
+    JSON.stringify(savedTickets)
+  );
+}
+
+/* =========================================================
+   NORMALIZATION
+   ========================================================= */
+
+function normalizeDraw(d){
+  if(!d)return null;
+
+  let white=d.white || d.numbers || [];
+
+  if(typeof white==="string"){
+    white=white
+      .split(/[,\s]+/)
+      .map(Number)
+      .filter(Number.isFinite);
+  }
+
+  white=[...new Set(
+    white
+      .map(Number)
+      .filter(n=>n>=1 && n<=70)
+  )].sort((a,b)=>a-b);
+
+  let mb=d.mb;
+
+  if(mb==null)mb=d.megaBall;
+  if(mb==null)mb=d.mega;
+
+  mb=Number(mb);
+
+  if(!d.date || white.length!==5 || !Number.isFinite(mb)){
+    return null;
+  }
+
+  return {
+    date:String(d.date).slice(0,10),
+    white,
+    mb
+  };
+}
+
+function dedupeDraws(arr){
+  const map=new Map();
+
+  for(const item of arr||[]){
+    const d=normalizeDraw(item);
+
+    if(!d)continue;
+
+    map.set(d.date,d);
+  }
+
+  return [...map.values()].sort(
+    (a,b)=>new Date(b.date)-new Date(a.date)
+  );
+}
+
+/* =========================================================
+   WINDOW
+   ========================================================= */
+
+function getWindowData(selectId){
+  const value=$(selectId).value;
+
+  if(value==="all"){
+    return [...history];
+  }
+
+  const count=Number(value);
+
+  return count>0
+    ? history.slice(0,count)
+    : [...history];
+}
+
+function getStrategyData(){
+  const value=$("strategyWindow").value;
+
+  if(value==="all"){
+    return [...history];
+  }
+
+  const count=Number(value);
+
+  return count>0
+    ? history.slice(0,count)
+    : [...history];
+}
+
+/* =========================================================
+   RENDER ALL
+   ========================================================= */
+
+function renderAll(){
+  renderLatestDrawings();
+  renderStatistics();
+  renderSavedTickets();
+  $("drawCountLabel").textContent=
+    history.length+" draws";
+}
+
+/* =========================================================
+   LATEST DRAWINGS
+   ========================================================= */
+
+function renderLatestDrawings(){
+  const el=$("latestDrawings");
+
+  const latest=history.slice(0,3);
+
+  if(!latest.length){
+    el.innerHTML='<div class="small">No drawing data.</div>';
+    return;
+  }
+
+  el.innerHTML=latest.map(d=>`
+    <div class="draw">
+      <div class="draw-date">${formatDate(d.date)}</div>
+      <div class="balls">
+        ${d.white.map(n=>`<span class="ball">${n}</span>`).join("")}
+        <span class="ball mega">${d.mb}</span>
+      </div>
+    </div>
+  `).join("");
+}
+
+/* =========================================================
+   STATISTICS
+   ========================================================= */
+
+function getWhiteFrequency(data){
+  const freq={};
+
+  for(let i=1;i<=70;i++)freq[i]=0;
+
+  data.forEach(d=>{
+    d.white.forEach(n=>{
+      freq[n]++;
+    });
+  });
+
+  return freq;
+}
+
+function getMegaFrequency(data){
+  const freq={};
+
+  for(let i=1;i<=25;i++)freq[i]=0;
+
+  data.forEach(d=>{
+    if(d.mb>=1 && d.mb<=25){
+      freq[d.mb]++;
+    }
+  });
+
+  return freq;
+}
+
+function sortedFrequency(freq,descending=true){
+  return Object.entries(freq)
+    .sort((a,b)=>{
+      const diff=Number(b[1])-Number(a[1]);
+      return descending?diff:-diff;
+    });
+}
+
+function renderStatistics(){
+  const data=getWindowData("statsWindow");
+
+  $("statDrawings").textContent=data.length;
+
+  if(!data.length){
+    return;
+  }
+
+  const freq=getWhiteFrequency(data);
+  const sorted=sortedFrequency(freq,true);
+
+  const hot=sorted
+    .slice(0,5)
+    .map(x=>x[0])
+    .join(", ");
+
+  const cold=sorted
+    .slice(-5)
+    .map(x=>x[0])
+    .join(", ");
+
+  const sums=data.map(d=>
+    d.white.reduce((a,b)=>a+b,0)
+  );
+
+  const avg=sums.reduce((a,b)=>a+b,0)/sums.length;
+
+  let odd=0;
+  let even=0;
+  let high=0;
+  let low=0;
+
+  data.forEach(d=>{
+    d.white.forEach(n=>{
+      if(n%2)odd++;
+      else even++;
+
+      if(n>=36)high++;
+      else low++;
+    });
+  });
+
+  $("statHot").textContent=hot;
+  $("statCold").textContent=cold;
+  $("statAverage").textContent=avg.toFixed(1);
+  $("statOddEven").textContent=`${odd} / ${even}`;
+  $("statHighLow").textContent=`${high} / ${low}`;
+
+  $("frequencyTable").innerHTML=`
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Number</th>
+            <th>Hits</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${sorted.slice(0,15).map((x,i)=>`
+            <tr>
+              <td>${i+1}</td>
+              <td>${x[0]}</td>
+              <td>${x[1]}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  const mf=getMegaFrequency(data);
+  const ms=sortedFrequency(mf,true);
+
+  $("megaFrequencyTable").innerHTML=`
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Mega Ball</th>
+            <th>Hits</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${ms.slice(0,10).map((x,i)=>`
+            <tr>
+              <td>${i+1}</td>
+              <td>${x[0]}</td>
+              <td>${x[1]}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+/* =========================================================
+   STRATEGIES
+   ========================================================= */
+
+function randomInt(min,max){
+  return Math.floor(
+    Math.random()*(max-min+1)
+  )+min;
+}
+
+function randomSample(arr,count){
+  const copy=[...arr];
+
+  for(let i=copy.length-1;i>0;i--){
+    const j=randomInt(0,i);
+    [copy[i],copy[j]]=[copy[j],copy[i]];
+  }
+
+  return copy.slice(0,count);
+}
+
+function normalizeWeights(weights){
+  const entries=Object.entries(weights);
+
+  const total=entries.reduce(
+    (sum,x)=>sum+Math.max(0,x[1]),
+    0
+  );
+
+  if(total<=0){
+    return Object.fromEntries(
+      entries.map(x=>[x[0],1])
+    );
+  }
+
+  return Object.fromEntries(
+    entries.map(x=>[
+      x[0],
+      Math.max(0,x[1])/total
+    ])
+  );
+}
+
+function weightedPick(weights,count){
+  const result=[];
+  const working={...weights};
+
+  while(result.length<count){
+    const available=Object.keys(working)
+      .filter(n=>!result.includes(Number(n)));
+
+    if(!available.length)break;
+
+    const total=available.reduce(
+      (sum,n)=>sum+Math.max(0,working[n]),
+      0
+    );
+
+    let r=Math.random()*total;
+    let selected=available[available.length-1];
+
+    for(const n of available){
+      r-=Math.max(0,working[n]);
+
+      if(r<=0){
+        selected=n;
+        break;
+      }
+    }
+
+    result.push(Number(selected));
+    delete working[selected];
+  }
+
+  return result.sort((a,b)=>a-b);
+}
+
+function overdueScores(data){
+  const score={};
+
+  for(let n=1;n<=70;n++){
+    score[n]=data.length+1;
+  }
+
+  for(let i=0;i<data.length;i++){
+    const d=data[i];
+
+    for(const n of d.white){
+      if(score[n]===data.length+1){
+        score[n]=i;
+      }
+    }
+  }
+
+  return score;
+}
+
+function pairFrequency(data){
+  const pairs={};
+
+  data.forEach(d=>{
+    const nums=[...d.white].sort((a,b)=>a-b);
+
+    for(let i=0;i<nums.length;i++){
+      for(let j=i+1;j<nums.length;j++){
+        const key=nums[i]+"-"+nums[j];
+        pairs[key]=(pairs[key]||0)+1;
+      }
+    }
+  });
+
+  return pairs;
+}
+
+/* =========================================================
+   GENERATE TICKET
+   ========================================================= */
+
+function generateTicket(strategy,data){
+  if(!data.length){
+    return {
+      white:randomSample(
+        Array.from({length:70},(_,i)=>i+1),
+        5
+      ),
+      mb:randomInt(1,24)
+    };
+  }
+
+  const freq=getWhiteFrequency(data);
+  let weights={};
+
+  for(let n=1;n<=70;n++){
+    weights[n]=1;
+  }
+
+  if(strategy==="frequency"){
+    for(let n=1;n<=70;n++){
+      weights[n]=1+freq[n]*2;
+    }
+  }
+
+  else if(strategy==="cold"){
+    for(let n=1;n<=70;n++){
+      weights[n]=1/(1+freq[n]);
+    }
+  }
+
+  else if(strategy==="overdue"){
+    const overdue=overdueScores(data);
+
+    for(let n=1;n<=70;n++){
+      weights[n]=1+overdue[n]*1.5;
+    }
+  }
+
+  else if(strategy==="balanced"){
+    for(let n=1;n<=70;n++){
+      weights[n]=1;
+
+      if(n>=1 && n<=20)weights[n]+=1;
+      if(n>=21 && n<=40)weights[n]+=1;
+      if(n>=41 && n<=55)weights[n]+=1;
+      if(n>=56)weights[n]+=1;
+    }
+  }
+
+  else if(strategy==="pairs"){
+    const pairs=pairFrequency(data);
+    const pairScore={};
+
+    for(let n=1;n<=70;n++){
+      pairScore[n]=1;
+    }
+
+    Object.entries(pairs).forEach(([key,value])=>{
+      const [a,b]=key.split("-").map(Number);
+      pairScore[a]+=value;
+      pairScore[b]+=value;
+    });
+
+    for(let n=1;n<=70;n++){
+      weights[n]=1+pairScore[n];
+    }
+  }
+
+  else if(strategy==="hybrid"){
+    const overdue=overdueScores(data);
+
+    for(let n=1;n<=70;n++){
+      weights[n]=
+        1+
+        freq[n]*1.7+
+        overdue[n]*0.7;
+    }
+  }
+
+  const white=weightedPick(
+    normalizeWeights(weights),
+    5
+  );
+
+  const megaFreq=getMegaFrequency(data);
+
+  let megaWeights={};
+
+  for(let n=1;n<=24;n++){
+    megaWeights[n]=1;
+  }
+
+  if(strategy==="frequency"){
+    for(let n=1;n<=24;n++){
+      megaWeights[n]=1+megaFreq[n]*2;
+    }
+  }
+
+  else if(strategy==="cold"){
+    for(let n=1;n<=24;n++){
+      megaWeights[n]=1/(1+megaFreq[n]);
+    }
+  }
+
+  else if(strategy==="overdue"){
+    for(let n=1;n<=24;n++){
+      megaWeights[n]=1/(1+megaFreq[n]);
+    }
+  }
+
+  else if(strategy==="hybrid"){
+    for(let n=1;n<=24;n++){
+      megaWeights[n]=1+megaFreq[n]*1.5;
+    }
+  }
+
+  let mb=weightedPick(
+    normalizeWeights(megaWeights),
+    1
+  )[0];
+
+  if(!mb)mb=randomInt(1,24);
+
+  return {white,mb};
+}
+
+function generateTickets(){
+  const strategy=$("strategy").value;
+  const count=Number($("ticketCount").value);
+
+  const data=getStrategyData();
+
+  const tickets=[];
+
+  for(let i=0;i<count;i++){
+    tickets.push(generateTicket(strategy,data));
+  }
+
+  renderTickets(tickets,strategy);
+}
+
+function renderTickets(tickets,strategy){
+  const el=$("ticketResults");
+
+  el.innerHTML=tickets.map((t,i)=>`
+    <div class="ticket">
+      <div class="ticket-head">
+        <span class="ticket-name">
+          Ticket ${i+1} • ${strategy}
+        </span>
+        <span class="small">$5</span>
+      </div>
+
+      <div class="ticket-balls">
+        ${t.white.map(n=>
+          `<span class="ball">${n}</span>`
+        ).join("")}
+
+        <span class="ball mega">${t.mb}</span>
+      </div>
+    </div>
+  `).join("");
+
+  window.lastGeneratedTickets=tickets;
+}
+
+/* =========================================================
+   STRATEGY ANALYSIS
+   ========================================================= */
+
+function runStrategyAnalysis(){
+  const data=getStrategyData();
+
+  if(data.length<5){
+    $("strategyResults").innerHTML=
+      '<div class="small result-bad">Not enough drawing data.</div>';
+    return;
+  }
+
+  const strategies=[
+    "frequency",
+    "cold",
+    "overdue",
+    "balanced",
+    "pairs",
+    "hybrid",
+    "random"
+  ];
+
+  const results=[];
+
+  for(const strategy of strategies){
+    let totalMatches=0;
+    let bestMatch=0;
+
+    for(let i=1;i<data.length;i++){
+      const training=data.slice(i);
+
+      if(!training.length)continue;
+
+      const ticket=generateTicket(strategy,training);
+      const actual=data[i-1];
+
+      const matches=ticket.white.filter(
+        n=>actual.white.includes(n)
+      ).length;
+
+      const megaMatch=
+        ticket.mb===actual.mb ? 1 : 0;
+
+      const total=matches+megaMatch;
+
+      totalMatches+=total;
+
+      if(total>bestMatch){
+        bestMatch=total;
+      }
+    }
+
+    const tests=Math.max(1,data.length-1);
+
+    results.push({
+      strategy,
+      average:totalMatches/tests,
+      best:bestMatch
+    });
+  }
+
+  results.sort((a,b)=>b.average-a.average);
+
+  $("strategyResults").innerHTML=`
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Strategy</th>
+            <th>Avg Matches</th>
+            <th>Best</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${results.map((r,i)=>`
+            <tr>
+              <td>${i===0?"★ ":""}${r.strategy}</td>
+              <td>${r.average.toFixed(2)}</td>
+              <td>${r.best}/6</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+/* =========================================================
+   BACKTEST
+   ========================================================= */
+
+function runBacktest(){
+  const strategy=$("backtestStrategy").value;
+  const data=getWindowData("backtestWindow");
+
+  if(data.length<5){
+    $("backtestResults").innerHTML=
+      '<div class="small result-bad">Not enough historical data.</div>';
+    return;
+  }
+
+  let tests=0;
+  let matches0=0;
+  let matches1=0;
+  let matches2=0;
+  let matches3=0;
+  let matches4=0;
+  let matches5=0;
+  let megaOnly=0;
+
+  for(let i=1;i<data.length;i++){
+    const training=data.slice(i);
+
+    const ticket=generateTicket(
+      strategy,
+      training
+    );
+
+    const actual=data[i-1];
+
+    const whiteMatches=ticket.white.filter(
+      n=>actual.white.includes(n)
+    ).length;
+
+    const megaMatch=
+      ticket.mb===actual.mb;
+
+    tests++;
+
+    if(whiteMatches===0)matches0++;
+    if(whiteMatches===1)matches1++;
+    if(whiteMatches===2)matches2++;
+    if(whiteMatches===3)matches3++;
+    if(whiteMatches===4)matches4++;
+    if(whiteMatches===5)matches5++;
+
+    if(whiteMatches===0 && megaMatch){
+      megaOnly++;
+    }
+  }
+
+  $("backtestResults").innerHTML=`
+    <div class="stat-grid">
+      <div class="stat">
+        <div class="stat-label">Tests</div>
+        <div class="stat-value">${tests}</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">0 White</div>
+        <div class="stat-value">${matches0}</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">1 White</div>
+        <div class="stat-value">${matches1}</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">2 White</div>
+        <div class="stat-value">${matches2}</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">3 White</div>
+        <div class="stat-value">${matches3}</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">4 White</div>
+        <div class="stat-value">${matches4}</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">5 White</div>
+        <div class="stat-value">${matches5}</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Mega Only</div>
+        <div class="stat-value">${megaOnly}</div>
+      </div>
+    </div>
+
+    <div class="small" style="margin-top:9px">
+      Strategy: <b>${strategy}</b><br>
+      Backtest uses historical data only and does not predict future drawings.
+    </div>
+  `;
+}
+
+/* =========================================================
+   SAVED TICKETS
+   ========================================================= */
+
+function saveGeneratedTickets(){
+  const tickets=window.lastGeneratedTickets||[];
+
+  if(!tickets.length){
+    toast("Generate tickets first");
+    return;
+  }
+
+  tickets.forEach(t=>{
+    savedTickets.push({
+      id:Date.now()+Math.random(),
+      white:[...t.white],
+      mb:t.mb,
+      source:"generated",
+      created:new Date().toISOString()
+    });
+  });
+
+  saveSavedTickets();
+  renderSavedTickets();
+
+  toast("Generated tickets saved");
+}
+
+function saveManualTicket(){
+  const white=$("manualWhite").value
+    .split(/[,\s]+/)
+    .map(Number)
+    .filter(Number.isFinite);
+
+  const mb=Number($("manualMega").value);
+
+  const unique=[...new Set(white)]
+    .filter(n=>n>=1 && n<=70)
+    .sort((a,b)=>a-b);
+
+  if(unique.length!==5){
+    toast("Enter exactly 5 white-ball numbers");
+    return;
+  }
+
+  if(!Number.isInteger(mb)||mb<1||mb>24){
+    toast("Mega Ball must be 1–24");
+    return;
+  }
+
+  savedTickets.push({
+    id:Date.now(),
+    white:unique,
+    mb,
+    source:"manual",
+    created:new Date().toISOString()
+  });
+
+  saveSavedTickets();
+  renderSavedTickets();
+
+  $("manualWhite").value="";
+  $("manualMega").value="";
+
+  toast("Manual ticket saved");
+}
+
+function renderSavedTickets(){
+  const el=$("savedTickets");
+
+  if(!savedTickets.length){
+    el.innerHTML=
+      '<div class="small">No saved tickets.</div>';
+    return;
+  }
+
+  el.innerHTML=savedTickets.map((t,i)=>`
+    <div class="ticket">
+      <div class="ticket-head">
+        <span class="ticket-name">
+          Saved ${i+1} • ${t.source}
+        </span>
+
+        <button
+          class="danger"
+          onclick="deleteSavedTicket(${i})">
+          Delete
+        </button>
+      </div>
+
+      <div class="ticket-balls">
+        ${t.white.map(n=>
+          `<span class="ball">${n}</span>`
+        ).join("")}
+        <span class="ball mega">${t.mb}</span>
+      </div>
+    </div>
+  `).join("");
+}
+
+function deleteSavedTicket(index){
+  savedTickets.splice(index,1);
+  saveSavedTickets();
+  renderSavedTickets();
+}
+
+function clearSavedTickets(){
+  if(!confirm("Clear all saved tickets?"))return;
+
+  savedTickets=[];
+  saveSavedTickets();
+  renderSavedTickets();
+}
+
+/* =========================================================
+   CLOUDflare WORKER UPDATE
+   ========================================================= */
+
+async function updateFromWorker(silent=false){
+  let url=$("workerUrl").value.trim();
+
+  if(!url){
+    if(!silent)toast("Enter Worker URL");
+    return;
+  }
+
+  if(url.endsWith("/")){
+    url=url.slice(0,-1);
+  }
+
+  $("updateStatus").textContent=
+    "Updating Mega Millions data...";
+
+  try{
+    const response=await fetch(
+      url+"?action=all",
+      {
+        method:"GET",
+        cache:"no-store"
+      }
+    );
+
+    const data=await response.json();
+
+    if(!response.ok){
+      throw new Error(
+        data.error ||
+        "Worker HTTP "+response.status
+      );
+    }
+
+    if(!Array.isArray(data.draws)){
+      throw new Error("Worker returned no drawing database");
+    }
+
+    const normalized=data.draws
+      .map(normalizeDraw)
+      .filter(Boolean);
+
+    if(normalized.length<1){
+      throw new Error("No valid drawings returned");
+    }
+
+    history=dedupeDraws([
+      ...history,
+      ...normalized
+    ]);
+
+    saveData();
+
+    updateJackpot(data);
+
+    renderAll();
+    renderStatistics();
+
+    $("updateStatus").textContent=
+      `Updated ${new Date().toLocaleString()} • ${history.length} drawings`;
+
+    if(!silent){
+      toast(`Updated ${normalized.length} drawings`);
+    }
+
+  }catch(error){
+    $("updateStatus").textContent=
+      "Update failed: "+error.message;
+
+    if(!silent){
+      toast("Update failed");
+    }
+  }
+}
+
+function updateJackpot(data){
+  if(data.jackpot!=null){
+    $("jackpot").textContent=
+      formatMoney(data.jackpot);
+  }
+
+  if(data.cashValue!=null){
+    $("cashValue").textContent=
+      formatMoney(data.cashValue);
+  }
+
+  if(data.nextDrawing){
+    $("nextDrawing").textContent=
+      formatNextDrawing(data.nextDrawing);
+  }
+}
+
+/* =========================================================
+   EXPORT / IMPORT
+   ========================================================= */
+
+function exportJSON(){
+  const blob=new Blob(
+    [JSON.stringify(history,null,2)],
+    {type:"application/json"}
+  );
+
+  downloadBlob(
+    blob,
+    "mega-millions-history.json"
+  );
+}
+
+function exportCSV(){
+  const rows=[
+    ["Date","White1","White2","White3","White4","White5","MegaBall"]
+  ];
+
+  history.forEach(d=>{
+    rows.push([
+      d.date,
+      ...d.white,
+      d.mb
+    ]);
+  });
+
+  const csv=rows
+    .map(row=>row.join(","))
+    .join("\n");
+
+  downloadBlob(
+    new Blob([csv],{type:"text/csv"}),
+    "mega-millions-history.csv"
+  );
+}
+
+function importCSV(event){
+  const file=event.target.files[0];
+
+  if(!file)return;
+
+  const reader=new FileReader();
+
+  reader.onload=()=>{
+    try{
+      const lines=reader.result
+        .split(/\r?\n/)
+        .filter(Boolean);
+
+      const imported=[];
+
+      for(let i=1;i<lines.length;i++){
+        const p=lines[i].split(",");
+
+        if(p.length<7)continue;
+
+        imported.push({
+          date:p[0],
+          white:[
+            Number(p[1]),
+            Number(p[2]),
+            Number(p[3]),
+            Number(p[4]),
+            Number(p[5])
+          ],
+          mb:Number(p[6])
+        });
+      }
+
+      history=dedupeDraws([
+        ...history,
+        ...imported
+      ]);
+
+      saveData();
+      renderAll();
+
+      toast(`Imported ${imported.length} drawings`);
+    }catch(e){
+      toast("CSV import failed");
+    }
+  };
+
+  reader.readAsText(file);
+}
+
+function downloadBlob(blob,filename){
+  const a=document.createElement("a");
+  const url=URL.createObjectURL(blob);
+
+  a.href=url;
+  a.download=filename;
+
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  setTimeout(()=>{
+    URL.revokeObjectURL(url);
+  },1000);
+}
+
+function resetDatabase(){
+  if(!confirm(
+    "Reset the local Mega Millions historical database?"
+  ))return;
+
+  history=SEED_DRAWS.map(normalizeDraw);
+  saveData();
+  renderAll();
+
+  toast("Database reset");
+}
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function formatDate(date){
+  const d=new Date(date+"T12:00:00");
+
+  return d.toLocaleDateString(
+    undefined,
+    {
+      month:"short",
+      day:"numeric",
+      year:"numeric"
+    }
+  );
+}
+
+function formatNextDrawing(value){
+  if(!value)return "—";
+
+  const d=new Date(value);
+
+  if(Number.isNaN(d.getTime())){
+    return String(value);
+  }
+
+  return d.toLocaleString(
+    undefined,
+    {
+      weekday:"short",
+      month:"short",
+      day:"numeric",
+      hour:"numeric",
+      minute:"2-digit"
+    }
+  );
+}
+
+function formatMoney(value){
+  if(value==null)return "—";
+
+  if(typeof value==="number"){
+    return "$"+value.toLocaleString();
+  }
+
+  const s=String(value).trim();
+
+  if(s.startsWith("$")){
+    return s;
+  }
+
+  return "$"+s;
+}
+
+function toast(message){
+  const el=$("toast");
+
+  el.textContent=message;
+  el.style.display="block";
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer=setTimeout(()=>{
+    el.style.display="none";
+  },2200);
+}
+
+/* =========================================================
+   WINDOW CHANGE EVENTS
+   ========================================================= */
+
+$("statsWindow").addEventListener(
+  "change",
+  renderStatistics
+);
+
+$("strategyWindow").addEventListener(
+  "change",
+  runStrategyAnalysis
+);
+
+/* =========================================================
+   INITIAL JACKPOT PLACEHOLDER
+   ========================================================= */
+
+if(history.length){
+  const latest=history[0];
+
+  if(latest){
+    $("updateStatus").textContent=
+      `Local database: ${history.length} drawings`;
+  }
+}
+
+</script>
+
+</body>
+</html>
