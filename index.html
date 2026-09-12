@@ -1,1 +1,4170 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <meta name="theme-color" content="#0b1220"> <title>Mega Millions AI Lab V6.3.1</title> <style> :root{ --bg:#0b1220; --card:#182235; --card2:#142033; --text:#f8fafc; --muted:#94a3b8; --accent:#f5c542; --accent2:#14b8a6; --success:#34d399; --danger:#fb7185; --border:#334155; --shadow:0 10px 30px rgba(0,0,0,.25); } *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.45} .wrap{max-width:1050px;margin:0 auto;padding:14px} h1,h2,h3{margin:0} button,input,select{font:inherit} button{border:1px solid var(--border);background:#1e293b;color:var(--text);border-radius:10px;padding:9px 12px;cursor:pointer} button:hover{filter:brightness(1.08)} button.primary{background:var(--accent);color:#111827;border-color:transparent;font-weight:700} button.secondary{background:var(--accent2);color:#06201c;border-color:transparent;font-weight:700} button.danger{background:transparent;color:#fda4af;border-color:#7f1d1d} input,select{width:100%;background:#0f172a;color:var(--text);border:1px solid var(--border);border-radius:9px;padding:9px} .header{padding:8px 2px 14px} .header h1{font-size:23px;font-weight:800} .subtitle{color:var(--muted);font-size:12px;margin-top:2px} .card{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);padding:14px;margin-bottom:12px} .section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px} .section-title h2{font-size:16px} .section-title small{color:var(--muted);font-size:11px} .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px} .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px} .grid5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px} .label{font-size:11px;color:var(--muted);margin-bottom:4px} .jackpot{text-align:center;padding:12px 8px} .jackpot-label{font-size:11px;color:var(--muted);letter-spacing:.08em} .jackpot-value{font-size:31px;font-weight:900;color:var(--accent);margin:2px 0} .cash{font-size:12px;color:var(--muted)} .jackpot-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;text-align:left} .jackpot-meta>div{background:#0f172a;border:1px solid var(--border);border-radius:10px;padding:8px} .jackpot-meta strong{display:block;font-size:12px} .jackpot-meta span{display:block;color:var(--muted);font-size:11px;margin-top:2px} .status{font-size:11px;color:var(--muted);margin-top:7px;text-align:center} .status.ok{color:var(--success)} .status.error{color:#fda4af} .balls{display:flex;flex-wrap:wrap;gap:7px;align-items:center} .ball{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#f8fafc;color:#111827;font-weight:800;font-size:13px;border:2px solid #e2e8f0} .ball.pb{background:var(--accent);border-color:#facc15;color:#111827} .draw-row{display:grid;grid-template-columns:100px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)} .draw-row:last-child{border-bottom:0} .draw-date{font-size:11px;color:var(--muted);padding-top:8px} .draw-main{display:flex;align-items:center;gap:7px;flex-wrap:wrap} .draw-main .ball{width:30px;height:30px;font-size:11px} .draw-main .ball.pb{margin-left:3px} .strategy-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end} .button-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px} .button-row button{flex:1;min-width:110px} .ticket{background:#0f172a;border:1px solid var(--border);border-radius:11px;padding:11px;margin-top:10px} .ticket-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px} .ticket-title{font-weight:800;font-size:13px} .ticket-meta{font-size:10px;color:var(--muted)} .ticket-grid{display:flex;gap:7px;align-items:center;flex-wrap:wrap} .ticket-actions{display:flex;gap:7px;margin-top:9px} .ticket-actions button{padding:7px 10px;font-size:11px} .empty{color:var(--muted);font-size:12px;padding:12px 0} .table-wrap{overflow-x:auto} table{width:100%;border-collapse:collapse;font-size:11px} th,td{border-bottom:1px solid var(--border);padding:8px 6px;text-align:left;white-space:nowrap} th{color:var(--muted);font-weight:600} .stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px} .stat-box{background:#0f172a;border:1px solid var(--border);border-radius:10px;padding:9px} .stat-box .v{font-size:18px;font-weight:800} .stat-box .l{font-size:10px;color:var(--muted)} .number-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px} .num-cell{background:#0f172a;border:1px solid var(--border);border-radius:8px;padding:6px 3px;text-align:center} .num-cell .n{font-size:11px;font-weight:700} .num-cell .f{font-size:9px;color:var(--muted);margin-top:2px} .saved-ticket{background:#0f172a;border:1px solid var(--border);border-radius:11px;padding:10px;margin-bottom:8px} .saved-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px} .saved-name{font-size:12px;font-weight:800} .saved-meta{font-size:9px;color:var(--muted)} .saved-edit-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px} .saved-edit-grid input{padding:7px 4px;text-align:center;font-size:11px} .saved-edit-grid input.pb-edit{border-color:#a16207} .saved-actions{display:flex;gap:6px;margin-top:8px} .saved-actions button{font-size:10px;padding:6px 8px} .saved-actions .update{color:#99f6e4;border-color:#115e59} .saved-actions .delete{color:#fda4af;border-color:#7f1d1d} .settings-grid{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end} .check{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);padding-bottom:9px} .check input{width:auto} .footer{color:var(--muted);font-size:10px;text-align:center;padding:8px 4px 20px} .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#020617;color:#fff;border:1px solid var(--border);padding:9px 12px;border-radius:10px;font-size:11px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:100} .toast.show{opacity:1} @media(max-width:650px){.wrap{padding:10px}.grid,.grid3{grid-template-columns:1fr}.grid5{grid-template-columns:repeat(5,minmax(0,1fr))}.draw-row{grid-template-columns:75px 1fr}.number-grid{grid-template-columns:repeat(6,minmax(0,1fr))}.saved-edit-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.strategy-row{grid-template-columns:1fr}.settings-grid{grid-template-columns:1fr}.button-row button{min-width:90px}} </style> </head> <body> <div class="wrap"> <div class="header"> <h1>Mega Millions AI Lab V6.3.1</h1> <div class="subtitle">Version 6.3 • Statistics • Strategies • Backtesting</div> </div> <section class="card jackpot"> <div class="jackpot-label">CURRENT ESTIMATED JACKPOT</div> <div class="jackpot-value" id="jackpot">$—</div> <div class="cash" id="cashValue">Cash Value: —</div> <div class="jackpot-meta"> <div><strong>Next Drawing</strong><span id="nextDrawing">—</span></div> <div><strong>Ticket Cost</strong><span>$5 / Play</span></div> </div> <div class="status" id="syncStatus">Waiting for data update…</div> </section> <section class="card"> <div class="section-title"> <h2>Latest Drawings</h2> <div style="display:flex;gap:7px;align-items:center"> <select id="latestCount" style="width:auto"> <option value="2">2</option> <option value="3" selected>3</option> <option value="5">5</option> <option value="10">10</option> </select> <button id="refreshBtn">Refresh</button> </div> </div> <div id="latestDrawings"></div> </section> <section class="card"> <div class="section-title"> <h2>AI Ticket Generator</h2> <small>5 white balls + Mega Ball</small> </div> <div class="strategy-row"> <div> <div class="label">Strategy</div> <select id="strategy"> <option>Random</option> <option>Balanced Odd / Even</option> <option>Hot Numbers</option> <option>Cold Numbers</option> <option>Hot + Cold Mix</option> <option>Good Spread</option> <option>Weighted Frequency</option> <option>Weighted + Balanced ⭐</option> <option>Low + High Mix</option> <option>Recency</option> <option>Hybrid AI</option> <option>Overdue Numbers</option> <option>Decade Spread</option> <option>Sum Balanced</option> <option>Pair Boost</option> </select> </div> <button class="primary" id="generateBtn">Generate Ticket</button> </div> <div id="generatedTicket"></div> <div class="button-row"> <button id="saveGeneratedBtn">Save Generated Ticket</button> </div> </section> <section class="card"> <div class="section-title"> <h2>Strategy Analysis History</h2> <select id="strategyWindow" style="width:auto"> <option value="20">Last 20</option> <option value="30">Last 30</option> <option value="50">Last 50</option> <option value="100" selected>Last 100</option> <option value="200">Last 200</option> <option value="500">Last 500</option> <option value="all">All Available</option> </select> </div> <div id="strategyHistory"></div> </section> <section class="card"> <div class="section-title"> <h2>Saving Numbers</h2> <small>Generated or manual</small> </div> <div id="savedNumbers"></div> <div style="margin-top:12px"> <div class="label">Manual Entry</div> <div class="grid5"> <input id="m1" type="number" min="1" max="70" placeholder="1"> <input id="m2" type="number" min="1" max="70" placeholder="2"> <input id="m3" type="number" min="1" max="70" placeholder="3"> <input id="m4" type="number" min="1" max="70" placeholder="4"> <input id="m5" type="number" min="1" max="70" placeholder="5"> </div> <div style="margin-top:8px"> <input id="mpb" type="number" min="1" max="24" placeholder="Mega Ball 1–24"> </div> <div class="button-row"> <button class="secondary" id="manualSaveBtn">Save Manual Ticket</button> <button id="manualClearBtn">Clear</button> </div> </div> </section> <section class="card"> <div class="section-title"> <h2>Historical Statistics</h2> <select id="statsWindow" style="width:auto"> <option value="20">Last 20</option> <option value="30">Last 30</option> <option value="50" selected>Last 50</option> <option value="100">Last 100</option> <option value="all">All Available</option> </select> </div> <div id="statistics"></div> </section> <section class="card"> <div class="section-title"> <h2>Walk-Forward Backtesting</h2> <small>Historical simulation</small> </div> <div class="grid"> <div> <div class="label">Minimum Training Drawings</div> <input id="btMinTrain" type="number" min="10" value="50"> </div> <div> <div class="label">Recency Window</div> <input id="btRecency" type="number" min="1" value="20"> </div> </div> <div class="button-row"> <button class="primary" id="backtestBtn">Run Backtest</button> </div> <div id="backtestResults"></div> </section> <section class="card"> <div class="section-title"> <h2>Automatic Update</h2> <small>Cloudflare Worker</small> </div> <div class="settings-grid"> <div> <div class="label">Worker URL</div> <input id="workerUrl" placeholder="https://your-worker.workers.dev"> </div> <div class="check"> <input id="updateOnOpen" type="checkbox" checked> <label for="updateOnOpen">Update on open</label> </div> </div> <div class="button-row"> <button class="secondary" id="updateBtn">Update Now</button> <button id="saveSettingsBtn">Save Settings</button> </div> <div class="status" id="updateMessage">No update performed yet.</div> </section> <section class="card"> <div class="section-title"> <h2>Data Tools</h2> </div> <div class="button-row"> <button id="exportCSVBtn">Export CSV</button> <button id="exportJSONBtn">Export JSON</button> <label style="flex:1;min-width:110px"> <input id="importCSVInput" type="file" accept=".csv,text/csv" style="display:none"> <button type="button" style="width:100%" onclick="document.getElementById('importCSVInput').click()">Import CSV</button> </label> <button class="danger" id="resetBtn">Reset Historical Database</button> </div> </section> <div class="footer"> Mega Millions numbers are random. This app provides statistical analysis and strategy experimentation only and cannot predict winning numbers. </div> </div> <div class="toast" id="toast"></div> <script> const STORAGE_HISTORY="mega_millions_ai_lab_v6_history"; const STORAGE_SAVED="mega_millions_ai_lab_v6_saved"; const STORAGE_SETTINGS="mega_millions_ai_lab_v6_settings"; const DEFAULT_WORKER=""; const SEED_DRAWS=[ {date:"2026-07-24",white:[2,5,42,44,60],pb:1}, {date:"2026-07-28",white:[34,48,49,59,70],pb:12} ]; let history=[]; let savedNumbers=[]; let settings={workerUrl:DEFAULT_WORKER,updateOnOpen:true}; let generatedTicket=null; let lastSyncTime=0; let updateInProgress=false; const $=id=>document.getElementById(id); function safeGet(key,fallback){ try{const v=localStorage.getItem(key);return v===null?fallback:JSON.parse(v)}catch(e){return fallback} } function safeSet(key,value){ try{localStorage.setItem(key,JSON.stringify(value));return true}catch(e){return false} } function normalizeDraw(d){ if(!d)return null; const date=d.date||d.drawDate||d.draw_date; const white=Array.isArray(d.white)?d.white:(Array.isArray(d.whiteBalls)?d.whiteBalls:[]); const pb=d.pb??d.megaBall??d.mega_ball??d.megaBallNumber; if(!date||white.length!==5||pb===undefined)return null; const w=white.map(Number).filter(Number.isInteger); const b=Number(pb); if(w.length!==5||new Set(w).size!==5||w.some(n=>n<1||n>70)||!Number.isInteger(b)||b<1||b>25)return null; return {date:String(date).slice(0,10),white:w.sort((a,b)=>a-b),pb:b}; } function normalizeHistory(list){ const map=new Map(); (Array.isArray(list)?list:[]).forEach(d=>{const n=normalizeDraw(d);if(n)map.set(n.date,n)}); return [...map.values()].sort((a,b)=>b.date.localeCompare(a.date)); } function loadData(){ history=normalizeHistory(safeGet(STORAGE_HISTORY,SEED_DRAWS)); savedNumbers=safeGet(STORAGE_SAVED,[]); settings={...settings,...safeGet(STORAGE_SETTINGS,{})}; } function saveHistory(){safeSet(STORAGE_HISTORY,history)} function saveSaved(){safeSet(STORAGE_SAVED,savedNumbers)} function saveSettings(){ settings.workerUrl=$("workerUrl").value.trim(); settings.updateOnOpen=$("updateOnOpen").checked; safeSet(STORAGE_SETTINGS,settings); showToast("Settings saved"); } function escapeHtml(value){return String(value).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))} function formatDate(date){ try{return new Date(date+"T00:00:00").toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"})}catch(e){return date}} function formatDrawingDate(value){ if(!value)return "—"; const s=String(value); const m=s.match(/(\d{4}-\d{2}-\d{2})/); return m?formatDate(m[1]):s} function formatMoney(value){ if(value===undefined||value===null||value==="")return "$—"; if(typeof value==="number")return "$"+value.toLocaleString(); const s=String(value); return s.startsWith("$")?s:"$"+s} function showToast(message){ const el=$("toast");el.textContent=message;el.classList.add("show");clearTimeout(showToast._t);showToast._t=setTimeout(()=>el.classList.remove("show"),2200)} function randomInt(min,max){return Math.floor(Math.random()*(max-min+1))+min} function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a} function sampleUnique(arr,count){return shuffle(arr).slice(0,count).sort((a,b)=>a-b)} function allWhite(){return Array.from({length:70},(_,i)=>i+1)} function allPB(){return Array.from({length:25},(_,i)=>i+1)} function playablePB(){return Array.from({length:24},(_,i)=>i+1)} function mean(arr){return arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:0} function median(arr){if(!arr.length)return 0;const a=[...arr].sort((x,y)=>x-y);const m=Math.floor(a.length/2);return a.length%2?a[m]:(a[m-1]+a[m])/2} function countsWhite(data){const c=Object.fromEntries(allWhite().map(n=>[n,0]));data.forEach(d=>d.white.forEach(n=>c[n]++));return c} function countsPB(data){const c=Object.fromEntries(allPB().map(n=>[n,0]));data.forEach(d=>{if(c[d.pb]!==undefined)c[d.pb]++});return c} function lastSeenAges(data,maxN,key){const ages={};const counts=Object.fromEntries(Array.from({length:maxN},(_,i)=>[i+1,0])); data.forEach((d,idx)=>{const vals=key==="pb"? [d.pb]:d.white;vals.forEach(n=>{if(counts[n]===0)counts[n]=idx+1})}); Object.keys(counts).forEach(n=>ages[n]=counts[n]||data.length+1);return ages} function weightedPick(items,weights){let total=weights.reduce((a,b)=>a+b,0);if(total<=0)return items[randomInt(0,items.length-1)];let r=Math.random()*total;for(let i=0;i<items.length;i++){r-=weights[i];if(r<=0)return items[i]}return items[items.length-1]} function selectWeightedUnique(items,weights,count){const pool=[...items];const ws=[...weights];const out=[];while(out.length<count&&pool.length){const pick=weightedPick(pool,ws);const idx=pool.indexOf(pick);out.push(pick);pool.splice(idx,1);ws.splice(idx,1)}return out.sort((a,b)=>a-b)} function normalizeWeights(weights){const max=Math.max(...weights,1);return weights.map(w=>w/max)} function getScores(data){const cw=countsWhite(data);const cp=countsPB(data);const recency=lastSeenAges(data,70,"white");const recencyPB=lastSeenAges(data,25,"pb"); const whiteScores=Object.fromEntries(allWhite().map(n=>{const freq=cw[n]||0;const rec=recency[n]||data.length+1;const recencyScore=1/Math.max(1,rec);return [n,freq*0.65+recencyScore*data.length*0.35]})); const pbScores=Object.fromEntries(allPB().map(n=>{const freq=cp[n]||0;const rec=recencyPB[n]||data.length+1;const recencyScore=1/Math.max(1,rec);return [n,freq*0.65+recencyScore*data.length*0.35]})); return {whiteScores,pbScores,cw,cp,recency,recencyPB} } function generateTicketForStrategy(strategy,data){ const d=data&&data.length?data:history; switch(strategy){ case "Random": return {white:sampleUnique(allWhite(),5),pb:sampleUnique(playablePB(),1)[0]}; case "Balanced Odd / Even": return generateBalanced(d); case "Hot Numbers": {const c=countsWhite(d);const items=allWhite();return {white:selectWeightedUnique(items,normalizeWeights(items.map(n=>c[n]+1)),5),pb:weightedPick(playablePB(),playablePB().map(n=>(countsPB(d)[n]||0)+1))}} case "Cold Numbers": {const c=countsWhite(d);const items=allWhite();return {white:selectWeightedUnique(items,items.map(n=>1/(c[n]+1)),5),pb:weightedPick(playablePB(),playablePB().map(n=>1/((countsPB(d)[n]||0)+1)))}} case "Hot + Cold Mix": return generateHotCold(d); case "Good Spread": return generateSpread(d); case "Weighted Frequency": {const c=countsWhite(d);return {white:selectWeightedUnique(allWhite(),normalizeWeights(allWhite().map(n=>(c[n]||0)+1)),5),pb:weightedPick(playablePB(),normalizeWeights(playablePB().map(n=>(countsPB(d)[n]||0)+1)))}} case "Weighted + Balanced ⭐": {let t=generateTicketForStrategy("Weighted Frequency",d);if(isBalanced(t.white))return t;return generateBalanced(d)} case "Low + High Mix": return generateLowHigh(d); case "Recency": {const a=lastSeenAges(d,70,"white");const ap=lastSeenAges(d,25,"pb");return {white:selectWeightedUnique(allWhite(),allWhite().map(n=>a[n]||1),5),pb:weightedPick(playablePB(),playablePB().map(n=>ap[n]||1))}} case "Hybrid AI": {const scores=getScores(d);return {white:selectWeightedUnique(allWhite(),normalizeWeights(allWhite().map(n=>scores.whiteScores[n]+1)),5),pb:weightedPick(playablePB(),playablePB().map(n=>scores.pbScores[n]+1))}} case "Overdue Numbers": {const a=lastSeenAges(d,70,"white");const ap=lastSeenAges(d,25,"pb");return {white:selectWeightedUnique(allWhite(),allWhite().map(n=>Math.pow(a[n]||1,1.35)),5),pb:weightedPick(playablePB(),playablePB().map(n=>Math.pow(ap[n]||1,1.35)))}} case "Decade Spread": return generateDecades(d); case "Sum Balanced": return generateSumBalanced(d); case "Pair Boost": return generatePairBoost(d); default:return generateTicketForStrategy("Random",d)} } function generatePB(data){const d=data&&data.length?data:history;const a=lastSeenAges(d,70,"white");const ap=lastSeenAges(d,24,"pb");return {white:selectWeightedUnique(allWhite(),allWhite().map(n=>a[n]||1),5),pb:weightedPick(playablePB(),playablePB().map(n=>ap[n]||1))}} function isBalanced(white){const odd=white.filter(n=>n%2).length;return odd>=2&&odd<=3} function generateBalanced(data){const nums=shuffle(allWhite());for(let i=0;i<100;i++){const w=sampleUnique(nums,5);if(isBalanced(w))return {white:w,pb:randomInt(1,24)}}return {white:sampleUnique(allWhite(),5),pb:randomInt(1,24)}} function generateSpread(data){for(let i=0;i<100;i++){const low=sampleUnique(Array.from({length:23},(_,i)=>i+1),2);const mid=sampleUnique(Array.from({length:23},(_,i)=>i+24),2);const high=sampleUnique(Array.from({length:24},(_,i)=>i+47),1);const w=[...low,...mid,...high].sort((a,b)=>a-b);if(new Set(w).size===5)return {white:w,pb:randomInt(1,24)}}return {white:sampleUnique(allWhite(),5),pb:randomInt(1,24)}} function generateHotCold(data){const c=countsWhite(data);const hot=allWhite().sort((a,b)=>c[b]-c[a]).slice(0,20);const cold=allWhite().sort((a,b)=>c[a]-c[b]).slice(0,20);let w=[...sampleUnique(hot,3),...sampleUnique(cold,2)];w=[...new Set(w)];while(w.length<5)w.push(randomInt(1,70));w=[...new Set(w)].slice(0,5).sort((a,b)=>a-b);return {white:w,pb:randomInt(1,24)}} function generateLowHigh(data){const low=sampleUnique(Array.from({length:34},(_,i)=>i+1),3);const high=sampleUnique(Array.from({length:36},(_,i)=>i+35),2);return {white:[...low,...high].sort((a,b)=>a-b),pb:randomInt(1,24)}} function generateDecades(data){const ranges=[[1,10],[11,20],[21,30],[31,40],[41,50],[51,60],[61,70]];let selected=shuffle(ranges).slice(0,5);let w=selected.map(r=>randomInt(r[0],r[1]));if(new Set(w).size<5)return generateDecades(data);return {white:w.sort((a,b)=>a-b),pb:randomInt(1,24)}} function generateSumBalanced(data){for(let i=0;i<200;i++){const w=sampleUnique(allWhite(),5);const sum=w.reduce((a,b)=>a+b,0);if(sum>=100&&sum<=220)return {white:w,pb:randomInt(1,24)}}return {white:sampleUnique(allWhite(),5),pb:randomInt(1,24)}} function generatePairBoost(data){const pairCounts={};data.forEach(d=>{for(let i=0;i<d.white.length;i++){for(let j=i+1;j<d.white.length;j++){const key=d.white[i]+"-"+d.white[j];pairCounts[key]=(pairCounts[key]||0)+1}}});const pairs=Object.entries(pairCounts).sort((a,b)=>b[1]-a[1]).slice(0,30);let w=[];if(pairs.length){const nums=pairs[Math.floor(Math.random()*pairs.length)][0].split("-").map(Number);w.push(...nums)}while(w.length<5){const n=randomInt(1,70);if(!w.includes(n))w.push(n)}return {white:w.sort((a,b)=>a-b),pb:randomInt(1,24)}} function generateTicket(){const strategy=$("strategy").value;generatedTicket=generateTicketForStrategy(strategy,history);renderGenerated();showToast("New Mega Millions ticket generated")} function ballsHtml(ticket){return `<div class="ticket-grid">${ticket.white.map(n=>`<div class="ball">${n}</div>`).join("")}<div class="ball pb">${ticket.pb}</div></div>`} function renderGenerated(){const target=$("generatedTicket");if(!generatedTicket){target.innerHTML=`<div class="empty">Choose a strategy and generate a ticket.</div>`;return}target.innerHTML=`<div class="ticket"><div class="ticket-head"><div><div class="ticket-title">${escapeHtml($("strategy").value)}</div><div class="ticket-meta">5 White Balls + Mega Ball</div></div></div>${ballsHtml(generatedTicket)}<div class="ticket-actions"><button onclick="copyText(ticketText(generatedTicket))">Copy</button></div></div>`} function ticketText(t){return `${t.white.join(" - ")} | Mega Ball ${t.pb}`} function copyText(text){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(()=>showToast("Copied")).catch(()=>showToast("Copy failed"))}else{const ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();showToast("Copied")}} function saveTicket(ticket,name,source){if(!ticket)return;savedNumbers.unshift({name:name||`Saved #${savedNumbers.length+1}`,source:source||"Saved",white:[...ticket.white],pb:ticket.pb,createdAt:new Date().toISOString()});saveSaved();renderSaved();showToast("Ticket saved")} function saveGeneratedTicket(){if(!generatedTicket){showToast("Generate a ticket first");return}saveTicket(generatedTicket,$("strategy").value,"AI Generated")} function saveManualTicket(){const t=getManualTicket();if(!t)return;saveTicket(t,"Manual Ticket","Manual Entry");clearManual()} function renderLatest(){const target=$("latestDrawings");const count=Number($("latestCount").value)||3;const data=history.slice(0,count);if(!data.length){target.innerHTML=`<div class="empty">No historical drawings available.</div>`;return}target.innerHTML=data.map(d=>`<div class="draw-row"><div class="draw-date">${formatDate(d.date)}</div><div class="draw-main">${d.white.map(n=>`<div class="ball">${n}</div>`).join("")}<div class="ball pb">${d.pb}</div></div></div>`).join("")} function getStatsData(){const value=$("statsWindow").value;if(value==="all")return [...history];const count=Number(value);return count>0?history.slice(0,count):[...history]} function renderStatistics(){const data=getStatsData();const target=$("statistics");if(!data.length){target.innerHTML=`<div class="empty">No data available.</div>`;return}const sums=data.map(d=>d.white.reduce((a,b)=>a+b,0));const oddCounts=data.map(d=>d.white.filter(n=>n%2).length);target.innerHTML=`<div class="stat-grid"><div class="stat-box"><div class="v">${data.length}</div><div class="l">Drawings analyzed</div></div><div class="stat-box"><div class="v">${mean(sums).toFixed(1)}</div><div class="l">Average white-ball sum</div></div><div class="stat-box"><div class="v">${median(sums).toFixed(1)}</div><div class="l">Median white-ball sum</div></div><div class="stat-box"><div class="v">${mean(oddCounts).toFixed(2)}</div><div class="l">Average odd count</div></div></div><div style="margin-top:12px"><div class="label">White Ball Frequency</div><div id="whiteStats"></div></div><div style="margin-top:12px"><div class="label">Mega Ball Frequency</div><div id="pbStats"></div></div>`;renderWhiteStats(data);renderPBStats(data)} function renderWhiteStats(data){const target=$("whiteStats");const c=countsWhite(data);target.innerHTML=`<div class="number-grid">${allWhite().map(n=>`<div class="num-cell"><div class="n">${n}</div><div class="f">${c[n]||0}</div></div>`).join("")}</div>`} function numberStatsHtml(c,maxN){return `<div class="number-grid">${Array.from({length:maxN},(_,i)=>i+1).map(n=>`<div class="num-cell"><div class="n">${n}</div><div class="f">${c[n]||0}</div></div>`).join("")}</div>`} function renderPBStats(data){const target=$("pbStats");target.innerHTML=numberStatsHtml(countsPB(data),25)} function strategyName(s){return s==="Weighted + Balanced ⭐"?"Weighted + Balanced":s} function renderStrategyHistory(){const data=getStrategyData();const target=$("strategyHistory");if(!data.length){target.innerHTML=`<div class="empty">No historical drawings available.</div>`;return}const counts=countsWhite(data);const pb=countsPB(data);const sortedWhite=allWhite().sort((a,b)=>counts[b]-counts[a]);const sortedPB=allPB().sort((a,b)=>pb[b]-pb[a]);target.innerHTML=`<div class="stat-grid"><div class="stat-box"><div class="v">${data.length}</div><div class="l">Drawings analyzed</div></div><div class="stat-box"><div class="v">${sortedWhite.slice(0,5).join(", ")}</div><div class="l">Top 5 white balls</div></div><div class="stat-box"><div class="v">${sortedPB.slice(0,5).join(", ")}</div><div class="l">Top Mega Balls</div></div><div class="stat-box"><div class="v">${data[0]?.date||"—"}</div><div class="l">Newest drawing analyzed</div></div></div>`} function getStrategyData(){const value=$("strategyWindow").value;if(value==="all")return [...history];const count=Number(value);return count>0?history.slice(0,count):[...history]} erdue Numbers</option> <option value="decades">Decade Spread</option> <option value="sum">Sum Balanced</option> <option value="pair">Pair Boost</option> </select> </div> <div class="control-group"> <label for="ticketCount">Number of Tickets</label> <select id="ticketCount"> <option>1</option> <option>2</option> <option>3</option> <option>4</option> <option>5</option> <option>6</option> <option>7</option> <option>8</option> <option>9</option> <option>10</option> <option>15</option> <option>20</option> </select> </div> <div class="control-group strategy-window-group"> <label for="strategyWindow">Strategy Analysis History</label> <select id="strategyWindow"> <option value="20">Last 20 drawings</option> <option value="30">Last 30 drawings</option> <option value="50">Last 50 drawings</option> <option value="100" selected>Last 100 drawings</option> <option value="200">Last 200 drawings</option> <option value="500">Last 500 drawings</option> <option value="all">All Available Drawings</option> </select> </div> </div> <div id="generatedTickets"></div> </section> <section class="card"> <h2>💾 Saving Numbers</h2> <div class="saved-top"> <div id="savedNumbers"></div> </div> <div class="manual-entry-wrap"> <div class="manual-entry-head">Manual Entry</div> <div class="manual-grid compact-manual-grid"> <input id="m1" type="number" min="1" max="70" placeholder="1"> <input id="m2" type="number" min="1" max="70" placeholder="2"> <input id="m3" type="number" min="1" max="70" placeholder="3"> <input id="m4" type="number" min="1" max="70" placeholder="4"> <input id="m5" type="number" min="1" max="70" placeholder="5"> <input id="mpb" class="pb-input" type="number" min="1" max="24" placeholder="MB"> </div> <div class="action-row"> <button class="btn success" id="saveManualBtn"> Save Manual Numbers </button> <button class="btn secondary" id="clearManualBtn"> Clear </button> </div> </div> </section> <section class="card"> <h2>📊 Historical Statistics</h2> <div class="controls"> <div class="control-group"> <label for="statsWindow">Analysis Window</label> <select id="statsWindow"> <option value="20">Last 20</option> <option value="30" selected>Last 30</option> <option value="50">Last 50</option> <option value="100">Last 100</option> <option value="all">All Available</option> </select> </div> <div class="control-group"> <label>Statistics</label> <div class="section-note" style="padding:10px;border:1px solid var(--border);border-radius:10px;background:#0f172a">White Balls + Mega Ball</div> </div> </div> <div id="statsDataInfo" class="section-note" style="margin-top:8px"></div><div id="statsOutput" style="margin-top:12px"></div> </section> <section class="card"> <h2>🧪 Walk-Forward Backtesting</h2> <p class="section-note"> Each historical draw is tested using only draws that occurred before it. This prevents future information from leaking into the training data. Results are historical research, not predictions. </p> <div class="controls"> <div class="control-group"> <label for="minTraining">Minimum Training Draws</label> <select id="minTraining"> <option value="10">10</option> <option value="15" selected>15</option> <option value="20">20</option> <option value="30">30</option> <option value="50">50</option> </select> </div> <div class="control-group"> <label for="recencyWindow">Recency Window</label> <select id="recencyWindow"> <option value="10">10</option> <option value="20" selected>20</option> <option value="30">30</option> <option value="60">60</option> <option value="120">120</option> </select> </div> </div> <button class="btn" id="backtestBtn" style="margin-top:12px"> Run Walk-Forward Backtest </button> <div id="progressArea" style="display:none"> <div class="progress"> <div id="progressBar" class="progress-bar"></div> </div> <div id="progressText" class="section-note"> Running… </div> </div> <div id="backtestOutput" style="margin-top:12px"></div> </section> <section class="card"> <h2>🔄 Automatic Update</h2> <div class="control-group"> <label for="workerUrl"> Cloudflare Worker URL </label> <input id="workerUrl" type="url" placeholder="https://your-worker.workers.dev"> </div> <div class="checkbox-row"> <input type="checkbox" id="updateOnOpen" checked> <label for="updateOnOpen"> Automatically update every time the app opens or returns to foreground </label> </div> <div class="action-row"> <button class="btn" id="saveSettingsBtn"> Save Settings </button> <button class="btn secondary" id="updateNowBtn"> Update Now </button> </div> <div id="updateMessage" class="status"> Automatic updates use your Cloudflare Worker. </div> </section> <section class="card"> <h2>🗄 Data Tools</h2> <div class="action-row"> <button class="btn secondary" id="exportCsvBtn"> Export CSV </button> <button class="btn secondary" id="exportJsonBtn"> Export JSON </button> <label class="file-label"> Import CSV <input id="csvFile" type="file" accept=".csv,text/csv"> </label> </div> <div class="action-row"> <button class="btn danger" id="resetDbBtn"> Reset Historical Database </button> </div> <p class="section-note"> Historical results are stored locally in your browser. Resetting the historical database does not delete your saved numbers. </p> </section> <footer> Mega Millions AI Lab V6.3.1<br> For research and entertainment only. No strategy can predict a random Mega Millions drawing or improve the mathematical odds of a ticket. </footer> </div> <div id="toast" class="toast"></div> <script> "use strict"; const STORAGE_KEY = "mega_millions_ai_lab_v6_draws"; const SETTINGS_KEY = "mega_millions_ai_lab_v6_settings"; const SAVED_KEY = "mega_millions_ai_lab_v6_saved_numbers"; const OLD_STORAGE_KEY = "mega_millions_ai_lab_v5_draws"; const OLD_SETTINGS_KEY = "mega_millions_ai_lab_v5_settings"; const SEED_DRAWS = [ {date:"2026-07-24",white:[2,5,42,44,60],pb:1}, {date:"2026-07-28",white:[34,48,49,59,70],pb:12} ]; let history = []; let savedNumbers = []; let settings = { workerUrl:"", updateOnOpen:true, strategyWindow:"100", latestCount:"2" }; let lastSyncTime = 0; let updateInProgress = false; const $ = id => document.getElementById(id); function safeGet(key, fallback=null){ try{ const raw = localStorage.getItem(key); if(raw === null) return fallback; return JSON.parse(raw); }catch(e){ return fallback; } } function safeSet(key,value){ try{ localStorage.setItem(key,JSON.stringify(value)); return true; }catch(e){ return false; } } function normalizeDraw(d){ if(!d) return null; const date = String(d.date || d.drawDate || "").slice(0,10); const white = Array.isArray(d.white) ? d.white.map(Number) : Array.isArray(d.numbers) ? d.numbers.slice(0,5).map(Number) : []; const pb = Number( d.pb ?? d.megaBall ?? d.mega_ball ?? d.megaBallNumber ); if(!date) return null; if(white.length !== 5) return null; if(white.some(n => !Number.isInteger(n) || n<1 || n>70)) return null; if(new Set(white).size !== 5) return null; if(!Number.isInteger(pb) || pb<1 || pb>25) return null; return { date, white:[...white].sort((a,b)=>a-b), pb }; } function normalizeHistory(arr){ if(!Array.isArray(arr)) return []; const map = new Map(); arr.forEach(d=>{ const n = normalizeDraw(d); if(n) map.set(n.date,n); }); return [...map.values()] .sort((a,b)=>a.date.localeCompare(b.date)); } function loadData(){ let stored = safeGet(STORAGE_KEY,null); if(!stored){ const old = safeGet(OLD_STORAGE_KEY,null); if(Array.isArray(old)){ stored = old; }else if(old && Array.isArray(old.draws)){ stored = old.draws; } } history = normalizeHistory(stored); if(history.length === 0){ history = normalizeHistory(SEED_DRAWS); saveHistory(); } const storedSettings = safeGet(SETTINGS_KEY,null); if(storedSettings && typeof storedSettings === "object"){ settings = { ...settings, ...storedSettings }; }else{ const oldSettings = safeGet(OLD_SETTINGS_KEY,null); if(oldSettings && typeof oldSettings === "object"){ settings = { ...settings, ...oldSettings }; safeSet(SETTINGS_KEY,settings); } } const storedSaved = safeGet(SAVED_KEY,[]); if(Array.isArray(storedSaved)){ savedNumbers = storedSaved; } $("workerUrl").value = settings.workerUrl || ""; $("updateOnOpen").checked = settings.updateOnOpen !== false; if($("strategyWindow")){ $("strategyWindow").value = settings.strategyWindow || "100"; } if($("latestCount")){ $("latestCount").value = settings.latestCount || "2"; } } function saveHistory(){ safeSet(STORAGE_KEY,history); } function saveSaved(){ safeSet(SAVED_KEY,savedNumbers); } function saveSettings(){ settings.workerUrl = $("workerUrl").value.trim(); settings.updateOnOpen = $("updateOnOpen").checked; settings.strategyWindow = $("strategyWindow") ? $("strategyWindow").value : (settings.strategyWindow || "100"); settings.latestCount = $("latestCount") ? $("latestCount").value : (settings.latestCount || "2"); safeSet(SETTINGS_KEY,settings); } function escapeHtml(str){ return String(str) .replaceAll("&","&amp;") .replaceAll("<","&lt;") .replaceAll(">","&gt;") .replaceAll('"',"&quot;") .replaceAll("'","&#039;"); } function formatDate(date){ if(!date) return "—"; const d = new Date(date + "T12:00:00"); if(Number.isNaN(d.getTime())) return date; return d.toLocaleDateString(undefined,{ month:"short", day:"numeric", year:"numeric" }); } function formatDrawingDate(date){ if(!date) return "—"; const raw=String(date).trim(); if(/^(SUN|MON|TUE|WED|THU|FRI|SAT)\b/i.test(raw)) return raw; let d=new Date(raw.includes("T") ? raw : raw+"T12:00:00"); if(Number.isNaN(d.getTime())) d=new Date(raw); if(Number.isNaN(d.getTime())) return raw; return d.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric",year:"numeric"}); } function formatMoney(v){ if(v === null || v === undefined || v === "") return "—"; if(typeof v === "number"){ return "$" + v.toLocaleString(); } const s = String(v); if(s.includes("$")) return s; return "$" + s; } function showToast(message){ const t = $("toast"); t.textContent = message; t.classList.add("show"); clearTimeout(showToast.timer); showToast.timer = setTimeout(()=>{ t.classList.remove("show"); },2600); } function randomInt(min,max,rng=Math.random){ return Math.floor(rng()*(max-min+1))+min; } function shuffle(arr,rng=Math.random){ const a = [...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(rng()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; } function sampleUnique(range,count,rng=Math.random){ return shuffle(range,rng).slice(0,count).sort((a,b)=>a-b); } function allWhite(){ return Array.from({length:70},(_,i)=>i+1); } function allPB(){ return Array.from({length:25},(_,i)=>i+1); } function playablePB(){ return Array.from({length:24},(_,i)=>i+1); } function mean(arr){ if(!arr.length) return 0; return arr.reduce((a,b)=>a+b,0)/arr.length; } function median(arr){ if(!arr.length) return 0; const a=[...arr].sort((x,y)=>x-y); const mid=Math.floor(a.length/2); return a.length%2 ? a[mid] : (a[mid-1]+a[mid])/2; } function countsWhite(data){ const c = {}; for(let i=1;i<=70;i++) c[i]=0; data.forEach(d=>{ d.white.forEach(n=>c[n]++); }); return c; } function countsPB(data){ const c = {}; for(let i=1;i<=25;i++) c[i]=0; data.forEach(d=>{ c[d.pb]++; }); return c; } function lastSeenAges(data,maxNum,type="white"){ const ages={}; for(let n=1;n<=maxNum;n++){ ages[n]=data.length+1; } for(let i=data.length-1;i>=0;i--){ const age=data.length-1-i; const nums = type==="pb" ? [data[i].pb] : data[i].white; nums.forEach(n=>{ if(ages[n] > age){ ages[n]=age; } }); } return ages; } function weightedPick(items,weights,rng=Math.random){ let total=0; const safe=weights.map(w=>{ const x=Number(w); return Number.isFinite(x) && x>0 ? x : 0; }); total=safe.reduce((a,b)=>a+b,0); if(total<=0){ return items[randomInt(0,items.length-1,rng)]; } let r=rng()*total; for(let i=0;i<items.length;i++){ r-=safe[i]; if(r<=0){ return items[i]; } } return items[items.length-1]; } function selectWeightedUnique(items,weights,count,rng=Math.random){ const pool=[...items]; const ws=[...weights]; const result=[]; while(result.length<count && pool.length){ const pick=weightedPick(pool,ws,rng); const idx=pool.indexOf(pick); result.push(pick); pool.splice(idx,1); ws.splice(idx,1); } return result.sort((a,b)=>a-b); } function normalizeWeights(weights){ const max=Math.max(...weights,1); return weights.map(w=>w/max); } function getScores(data,strategy){ const c=countsWhite(data); const ages=lastSeenAges(data,70); const freq=allWhite().map(n=>c[n]); const maxFreq=Math.max(...freq,1); const freqScore=n=>{ return (c[n]+1)/(maxFreq+1); }; const recencyScore=n=>{ return Math.exp(-ages[n]/8); }; const overdueScore=n=>{ return ages[n]+1; }; switch(strategy){ case "hot": return allWhite().map(n=>Math.pow(c[n]+1,1.7)); case "cold": return allWhite().map(n=> 1/(c[n]+1) ); case "weighted": return allWhite().map(n=> c[n]+1 ); case "recency": return allWhite().map(n=> recencyScore(n) ); case "overdue": return allWhite().map(n=> overdueScore(n) ); case "hybrid": return allWhite().map(n=> 0.55*freqScore(n)+0.45*recencyScore(n) ); default: return allWhite().map(n=>1); } }(n) ); case "hybrid": return allWhite().map(n=> .55*freqScore(n)+ .45*recencyScore(n) ); case "overdue": return allWhite().map(n=> overdueScore(n) ); case "weightedBalanced": return allWhite().map(n=>{ const odd=n%2===1 ? 1.15 : 1; return (c[n]+1)*odd; }); default: return allWhite().map(()=>1); } } function generatePB(strategy,data,rng=Math.random){ if(strategy==="random" || strategy==="balanced" || strategy==="spread" || strategy==="lowhigh" || strategy==="decades" || strategy==="sum"){ return randomInt(1,24,rng); } const nums=playablePB(); const c=countsPB(data); const ages=lastSeenAges(data,24,"pb"); let weights; switch(strategy){ case "hot": weights=nums.map(n=>Math.pow(c[n]+1,1.7)); break; case "cold": weights=nums.map(n=>1/(c[n]+1)); break; case "weighted": case "weightedBalanced": weights=nums.map(n=>c[n]+1); break; case "recency": weights=nums.map(n=>Math.exp(-ages[n]/8)); break; case "hybrid": weights=nums.map(n=>{ const max=Math.max(...Object.values(c),1); const f=(c[n]+1)/(max+1); const r=Math.exp(-ages[n]/8); return .55*f+.45*r; }); break; case "overdue": weights=nums.map(n=>ages[n]+1); break; case "hotcold": weights=nums.map(n=>{ return (c[n]+1) * (ages[n]+1)/Math.max(data.length,1); }); break; case "pair": weights=nums.map(n=>c[n]+1); break; default: weights=nums.map(()=>1); } return weightedPick(nums,weights,rng); } function generateBalanced(data,rng){ const odd=allWhite().filter(n=>n%2); const even=allWhite().filter(n=>n%2===0); const oddCount=rng()<.5 ? 2 : 3; return [ ...sampleUnique(odd,oddCount,rng), ...sampleUnique(even,5-oddCount,rng) ].sort((a,b)=>a-b); } function generateSpread(data,rng){ const low=Array.from({length:23},(_,i)=>i+1); const mid=Array.from({length:23},(_,i)=>i+24); const high=Array.from({length:24},(_,i)=>i+47); let result=[ ...sampleUnique(low,1,rng), ...sampleUnique(mid,1,rng), ...sampleUnique(high,1,rng) ]; const remaining=allWhite().filter(n=>!result.includes(n)); result=[ ...result, ...sampleUnique(remaining,2,rng) ]; return result.sort((a,b)=>a-b); } function generateHotCold(data,rng){ const c=countsWhite(data); const sorted=allWhite().sort((a,b)=>c[b]-c[a]); const hotPool=sorted.slice(0,20); const coldPool=sorted.slice(-20); let result=sampleUnique(hotPool,3,rng); const coldCandidates=coldPool.filter(n=>!result.includes(n)); result=[...result,...sampleUnique(coldCandidates,2,rng)]; result=[...new Set(result)]; while(result.length<5){ const n=randomInt(1,70,rng); if(!result.includes(n)) result.push(n); } return result.sort((a,b)=>a-b); } function generateLowHigh(data,rng){ const low=Array.from({length:34},(_,i)=>i+1); const high=Array.from({length:36},(_,i)=>i+35); const lowCount=rng()<.5 ? 2 : 3; return [ ...sampleUnique(low,lowCount,rng), ...sampleUnique(high,5-lowCount,rng) ].sort((a,b)=>a-b); } function generateDecades(data,rng){ const decades=[ [1,10], [11,20], [21,30], [31,40], [41,50], [51,60], [61,70] ]; let result=[]; const chosen=shuffle( decades.map((d,i)=>i), rng ).slice(0,5); chosen.forEach(i=>{ result.push( randomInt(decades[i][0],decades[i][1],rng) ); }); return result.sort((a,b)=>a-b); } function generateSumBalanced(data,rng){ const sums=data.map(d=> d.white.reduce((a,b)=>a+b,0) ); const target=median(sums); let best=null; let bestDiff=Infinity; for(let i=0;i<120;i++){ const ticket=sampleUnique(allWhite(),5,rng); const sum=ticket.reduce((a,b)=>a+b,0); const diff=Math.abs(sum-target); if(diff<bestDiff){ best=ticket; bestDiff=diff; } if(diff<=8) break; } return best.sort((a,b)=>a-b); } function generatePairBoost(data,rng){ if(!data.length){ return sampleUnique(allWhite(),5,rng); } const counts=countsWhite(data); const pair={}; data.forEach(d=>{ const nums=d.white; for(let i=0;i<nums.length;i++){ for(let j=i+1;j<nums.length;j++){ const a=nums[i]; const b=nums[j]; const key=a+"-"+b; pair[key]=(pair[key]||0)+1; } } }); let result=[]; const firstPool=allWhite(); const firstWeights=firstPool.map(n=>counts[n]+1); result.push( weightedPick(firstPool,firstWeights,rng) ); while(result.length<5){ const candidates=allWhite() .filter(n=>!result.includes(n)); const weights=candidates.map(n=>{ let score=counts[n]+1; result.forEach(existing=>{ const a=Math.min(existing,n); const b=Math.max(existing,n); score+=2*(pair[a+"-"+b]||0); }); return score; }); result.push( weightedPick(candidates,weights,rng) ); } return result.sort((a,b)=>a-b); } function generateTicket(strategy,data,rng=Math.random){ let white; switch(strategy){ case "random": white=sampleUnique(allWhite(),5,rng); break; case "balanced": white=generateBalanced(data,rng); break; case "hot": white=selectWeightedUnique( allWhite(), getScores(data,"hot"), 5, rng ); break; case "cold": white=selectWeightedUnique( allWhite(), getScores(data,"cold"), 5, rng ); break; case "hotcold": white=generateHotCold(data,rng); break; case "spread": white=generateSpread(data,rng); break; case "weighted": white=selectWeightedUnique( allWhite(), getScores(data,"weighted"), 5, rng ); break; case "weightedBalanced": white=selectWeightedUnique( allWhite(), getScores(data,"weightedBalanced"), 5, rng ); let tries=0; while( tries<40 && !isBalanced(white) ){ white=selectWeightedUnique( allWhite(), getScores(data,"weightedBalanced"), 5, rng ); tries++; } break; case "lowhigh": white=generateLowHigh(data,rng); break; case "recency": white=selectWeightedUnique( allWhite(), getScores(data,"recency"), 5, rng ); break; case "hybrid": white=selectWeightedUnique( allWhite(), getScores(data,"hybrid"), 5, rng ); break; case "overdue": white=selectWeightedUnique( allWhite(), getScores(data,"overdue"), 5, rng ); break; case "decades": white=generateDecades(data,rng); break; case "sum": white=generateSumBalanced(data,rng); break; case "pair": white=generatePairBoost(data,rng); break; default: white=sampleUnique(allWhite(),5,rng); } return { white:white.sort((a,b)=>a-b), pb:generatePB(strategy,data,rng) }; } function isBalanced(white){ const odd=white.filter(n=>n%2).length; return odd===2 || odd===3; } function ballsHtml(white,pb){ return ` <div class="balls"> ${white.map(n=>` <span class="ball">${n}</span> `).join("")} <span class="ball pb">${pb}</span> </div> `; } function renderLatest(){ const target=$("latestDraws"); const count=Math.min(10,Math.max(2,Number($("latestCount")?.value || settings.latestCount || 2))); if($("latestTitle")){ $("latestTitle").textContent=`Last ${count} Drawings`; } const latest=[...history].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,count); if(!latest.length){ target.innerHTML=`<div class="empty">No drawings available.</div>`; return; } target.innerHTML=latest.map(d=>` <div class="draw-row"> <div class="draw-date">${escapeHtml(formatDrawingDate(d.date))}</div> ${ballsHtml(d.white,d.pb)} </div> `).join(""); } function getStatsData(){ const value=$("statsWindow").value; const ordered=[...history].sort((a,b)=>a.date.localeCompare(b.date)); if(value==="all"){ return ordered; } const requested=Number(value); return requested>0 ? ordered.slice(-requested) : ordered; } function renderStatistics(){ const data=getStatsData(); const available=history.length; const selected=$("statsWindow").value; const requested=selected==="all" ? available : Number(selected); const analyzed=data.length; if($("statsDataInfo")){ $("statsDataInfo").innerHTML=selected==="all" ? `<strong>Drawings Analyzed: ${analyzed}</strong> of ${available} available drawings.` : `<strong>Drawings Analyzed: ${analyzed}</strong> (latest ${Math.min(requested,available)} of ${available} available drawings)`; } $("statsOutput").innerHTML=""; if(!data.length){ $("statsOutput").innerHTML=`<div class="empty">No historical data.</div>`; return; } renderWhiteStats(data); renderPBStats(data); } function renderWhiteStats(data){ const c=countsWhite(data); const nums=allWhite(); const hot=[...nums].sort((a,b)=>c[b]-c[a]||a-b).slice(0,10); const cold=[...nums].sort((a,b)=>c[a]-c[b]||a-b).slice(0,10); const oddCount=data.map(d=>d.white.filter(n=>n%2).length); const sums=data.map(d=>d.white.reduce((a,b)=>a+b,0)); $("statsOutput").innerHTML+=`<div class="stats-subsection"><h3>⚪ White Ball Statistics</h3><div class="stat-grid"><div class="stat"><div class="stat-value">${Math.round(mean(sums))}</div><div class="stat-label">Average White Sum</div></div><div class="stat"><div class="stat-value">${mean(oddCount).toFixed(2)}</div><div class="stat-label">Average Odd Balls</div></div><div class="stat"><div class="stat-value">${Math.round(mean(data.map(d=>d.white.filter(n=>n>=36).length)))}</div><div class="stat-label">Avg High Balls</div></div></div><h3>🔥 Hot White Numbers</h3>${numberStatsHtml(hot,c)}<h3>❄️ Cold White Numbers</h3>${numberStatsHtml(cold,c)}</div>`; } function numberStatsHtml(nums,c){ return `<div class="balls">${nums.map(n=>`<span class="ball" title="${c[n]} appearances">${n}</span>`).join("")}</div>`; } function renderPBStats(data){ const c=countsPB(data); const nums=allPB(); const hot=[...nums].sort((a,b)=>c[b]-c[a]||a-b).slice(0,10); const cold=[...nums].sort((a,b)=>c[a]-c[b]||a-b).slice(0,10); const avg=Math.round(mean(data.map(d=>d.pb))); $("statsOutput").innerHTML+=`<div class="stats-subsection"><h3>🔴 Mega Ball Statistics</h3><div class="stat-grid"><div class="stat"><div class="stat-value">${avg}</div><div class="stat-label">Average Mega Ball</div></div></div><h3>🔥 Hot Mega Balls</h3><div class="balls">${hot.map(n=>`<span class="ball pb" title="${c[n]} appearances">${n}</span>`).join("")}</div><h3>❄️ Cold Mega Balls</h3><div class="balls">${cold.map(n=>`<span class="ball pb" title="${c[n]} appearances">${n}</span>`).join("")}</div></div>`; } function strategyName(key){ const map={ random:"Random", balanced:"Balanced Odd / Even", hot:"Hot Numbers", cold:"Cold Numbers", hotcold:"Hot + Cold Mix", spread:"Good Spread", weighted:"Weighted Frequency", weightedBalanced:"Weighted + Balanced", lowhigh:"Low + High Mix", recency:"Recency", hybrid:"Hybrid AI", overdue:"Overdue Numbers", decades:"Decade Spread", sum:"Sum Balanced", pair:"Pair Boost" }; return map[key] || key; } let currentGenerated=[]; function renderGenerated(){ const target=$("generatedTickets"); if(!currentGenerated.length){ target.innerHTML=""; return; } target.innerHTML=currentGenerated.map((t,i)=>` <div class="ticket"> <div class="ticket-top"> <div class="ticket-title"> Ticket ${i+1} </div> <div class="ticket-actions"> <button onclick="copyGenerated(${i})"> Copy </button> <button class="save-btn" onclick="saveGenerated(${i})"> Save </button> </div> </div> <div class="ticket-balls"> ${t.white.map(n=>` <span class="ball">${n}</span> `).join("")} <span class="ball pb">${t.pb}</span> </div> </div> `).join(""); } function getStrategyData(){ const value=$("strategyWindow").value; if(value==="all") return [...history]; const count=Number(value); return count>0 ? history.slice(-count) : [...history]; } function generateTickets(strategy=null){ if(!strategy){ strategy=$("strategy").value; } const count=Math.min( 20, Math.max(1,Number($("ticketCount").value)) ); const strategyData=getStrategyData(); currentGenerated=[]; const used=new Set(); let attempts=0; while(currentGenerated.length<count && attempts<500){ const ticket=generateTicket(strategy,strategyData); const key=ticket.white.join(",")+"|"+ticket.pb; if(!used.has(key)){ used.add(key); currentGenerated.push(ticket); } attempts++; } renderGenerated(); showToast( `${currentGenerated.length} ticket${currentGenerated.length===1?"":"s"} generated using ${strategyData.length} drawings` ); } function ticketText(t){ return `${t.white.join(" - ")} | Mega Ball ${t.pb}`; } async function copyText(text){ try{ await navigator.clipboard.writeText(text); showToast("Copied to clipboard"); return; }catch(e){} const ta=document.createElement("textarea"); ta.value=text; ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select(); try{ document.execCommand("copy"); showToast("Copied to clipboard"); }catch(e){ showToast("Copy failed"); } ta.remove(); } window.copyGenerated=function(index){ const t=currentGenerated[index]; if(t){ copyText(ticketText(t)); } }; function saveTicket(ticket,source="Generated"){ if(!ticket) return; const entry={ id:Date.now()+"_"+Math.random().toString(36).slice(2), white:[...ticket.white].sort((a,b)=>a-b), pb:Number(ticket.pb), name:`Saved #${savedNumbers.length+1}`, source, createdAt:new Date().toISOString() }; savedNumbers.unshift(entry); saveSaved(); renderSaved(); showToast("Numbers saved"); } window.saveGenerated=function(index){ const t=currentGenerated[index]; if(t){ saveTicket(t,"Generated"); } }; function getManualTicket(){ const white=[ $("m1").value, $("m2").value, $("m3").value, $("m4").value, $("m5").value ].map(Number); const pb=Number($("mpb").value); if( white.some(n=>!Number.isInteger(n)||n<1||n>70) ){ showToast("Enter 5 valid white numbers from 1–70"); return null; }} function clearManual(){ ["m1","m2","m3","m4","m5","mpb"].forEach(id=>{ $(id).value=""; }); } function renderSaved(){ const target=$("savedNumbers"); if(!savedNumbers.length){ target.innerHTML= `<div class="empty">No saved numbers yet.</div>`; return; } target.innerHTML=savedNumbers.map((s,i)=>` <div class="saved-ticket"> <div class="saved-head"> <div> <div class="saved-name"> ${escapeHtml(s.name || `Saved #${i+1}`)} </div> <div class="saved-meta"> ${escapeHtml(s.source || "Saved")} ${s.createdAt ? " • "+escapeHtml(new Date(s.createdAt).toLocaleString()) : ""} </div> </div> </div> <div class="saved-edit-grid"> ${s.white.map((n,j)=>` <input id="saved_${i}_${j}" type="number" min="1" max="70" value="${n}" aria-label="Saved ticket ${i+1} white number ${j+1}"> `).join("")} <input id="saved_${i}_pb" class="pb-edit" type="number" min="1" max="24" value="${s.pb}" aria-label="Saved ticket ${i+1} Mega Ball"> </div> <div class="saved-actions"> <button class="update" onclick="updateSaved(${i})">Update</button> <button onclick="copySaved(${i})">Copy</button> <button class="delete" onclick="deleteSaved(${i})">Delete</button> </div> </div> `).join(""); } window.updateSaved=function(index){ const s=savedNumbers[index]; if(!s) return; const white=[]; for(let j=0;j<5;j++){ const value=Number($( `saved_${index}_${j}` ).value); if(!Number.isInteger(value) || value<1 || value>70){ showToast("White numbers must be from 1–70"); return; } white.push(value); } if(new Set(white).size!==5){ showToast("White numbers must be unique"); return; } const pb=Number($( `saved_${index}_pb` ).value); if(!Number.isInteger(pb) || pb<1 || pb>24){ showToast("Mega Ball must be from 1–24"); return; } s.white=white.sort((a,b)=>a-b); s.pb=pb; s.editedAt=new Date().toISOString(); saveSaved(); renderSaved(); showToast("Saved numbers updated"); }; window.copySaved=function(index){ const s=savedNumbers[index]; if(s){ copyText(ticketText(s)); } }; window.loadSaved=function(index){ const s=savedNumbers[index]; if(!s) return; $("m1").value=s.white[0]; $("m2").value=s.white[1]; $("m3").value=s.white[2]; $("m4").value=s.white[3]; $("m5").value=s.white[4]; $("mpb").value=s.pb; window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"}); }; window.deleteSaved=function(index){ if(!savedNumbers[index]) return; if(!confirm("Delete this saved Mega Millions ticket?")) return; savedNumbers.splice(index,1); saveSaved(); renderSaved(); showToast("Saved numbers deleted"); }; function setSyncStatus(message,type="info"){ const el=$("syncStatus"); if(!el) return; el.textContent=message; el.className="sync-status "+type; } function updateHeader(data){ if(!data || typeof data!=="object") return; if(data.jackpot !== undefined){ $("jackpot").textContent=formatMoney(data.jackpot); } if(data.cashValue !== undefined){ $("cashValue").textContent="Cash Value: "+formatMoney(data.cashValue); } if(data.nextDrawing !== undefined){ $("nextDrawing").textContent=formatDrawingDate(data.nextDrawing); } if(data.ticketCost !== undefined){ $("ticketCost").textContent=String(data.ticketCost); } } async function updateFromWorker(reason="manual"){ if(updateInProgress) return; const url=(settings.workerUrl || $("workerUrl").value || "").trim(); if(!url){ setSyncStatus("Worker URL not configured","warn"); $("updateMessage").textContent="Enter your Cloudflare Worker URL first."; return; } updateInProgress=true; setSyncStatus("Updating…","busy"); $("updateMessage").textContent="Retrieving the latest Mega Millions history…"; try{ const response=await fetch(url,{cache:"no-store"}); if(!response.ok){ throw new Error(`Worker HTTP ${response.status}`); } const data=await response.json(); if(data.error){ throw new Error(data.error); } updateHeader(data); if(Array.isArray(data.draws)){ const before=history.length; history=normalizeHistory([...history,...data.draws]); saveHistory(); const added=Math.max(0,history.length-before); renderLatest(); renderStatistics(); renderSaved(); lastSyncTime=Date.now(); setSyncStatus(`Synced • ${history.length} drawings`,"ok"); $("updateMessage").textContent=`Update complete. ${added} new drawing${added===1?"":"s"} added.`; }else{ throw new Error("Worker response did not contain a draws array."); } }catch(error){ console.error(error); setSyncStatus("Update failed","error"); $("updateMessage").textContent="Update failed: "+error.message; showToast("Mega Millions update failed"); }finally{ updateInProgress=false; } } function automaticOpenUpdate(){ if(settings.updateOnOpen && settings.workerUrl){ updateFromWorker("open"); } } function seededRandom(seed){ let t=seed>>>0; return function(){ t+=0x6D2B79F5; let r=Math.imul(t ^ t>>>15,1|t); r^=r+Math.imul(r ^ r>>>7,61|r); return ((r ^ r>>>14)>>>0)/4294967296; }; } function scoreTicket(ticket,target){ const whiteHits=ticket.white.filter(n=>target.white.includes(n)).length; const pbHit=ticket.pb===target.pb ? 1 : 0; return { whiteHits,pbHit,total:ticket.white.filter(n=>target.white.includes(n)).length+pbHit }; } function emptyMetrics(){ return { draws:0, whiteHit0:0, whiteHit1:0, whiteHit2:0, whiteHit3:0, whiteHit4:0, whiteHit5:0, pbHit:0, fivePlusPb:0, totalWhiteHits:0 }; } function addMetrics(m,s){ m.draws++; m[`whiteHit${s.whiteHits}`]++; if(s.pbHit) m.pbHit++; if(s.whiteHits===5 && s.pbHit) m.fivePlusPb++; m.totalWhiteHits+=s.whiteHits; } function pct(a,b){ return b ? ((100*a)/b).toFixed(2)+"%" : "0.00%"; } async function runBacktest(){ if(history.length<2){ showToast("Not enough historical drawings for backtesting"); return; } const minTraining=Number($("minTraining").value); const recencyWindow=Number($("recencyWindow").value); const ordered=[...history].sort((a,b)=>a.date.localeCompare(b.date)); const progress=$("progressArea"); const bar=$("progressBar"); const text=$("progressText"); progress.style.display="block"; bar.style.width="0%"; const strategies=[ "random","balanced","hot","cold","hotcold","spread","weighted","weightedBalanced","lowhigh","recency","hybrid","overdue","decades","sum","pair" ]; const metrics={}; strategies.forEach(s=>metrics[s]=emptyMetrics()); const eligible=ordered.length-minTraining; if(eligible<=0){ progress.style.display="none"; showToast("Not enough drawings for selected minimum training"); return; } for(let i=minTraining;i<ordered.length;i++){ const training=ordered.slice(Math.max(0,i-recencyWindow),i); const target=ordered[i]; strategies.forEach((strategy,index)=>{ const seed=(i+1)*1000+(index+1)*97; const rng=seededRandom(seed); const ticket=generateTicket(strategy,training,rng); const score=scoreTicket(ticket,target); addMetrics(metrics[strategy],score); }); const percent=((i-minTraining+1)/eligible)*100; bar.style.width=percent.toFixed(1)+"%"; text.textContent=`Backtesting ${i-minTraining+1} of ${eligible} drawings…`; if(i%5===0){ await new Promise(resolve=>setTimeout(resolve,0)); } } progress.style.display="none"; renderBacktest(metrics,eligible,recencyWindow); } function renderBacktest(metrics,eligible,recencyWindow){ const rows=Object.entries(metrics).map(([strategy,m])=>({strategy,m,avg:m.draws?m.totalWhiteHits/m.draws:0,rate:m.draws?m.fivePlusPb/m.draws:0})).sort((a,b)=>b.avg-a.avg); $("backtestOutput").innerHTML=` <div class="backtest-summary"> <strong>Walk-Forward Results</strong><br> ${eligible} historical drawings tested • Recency window: ${recencyWindow} drawings </div> <div class="table-wrap"><table><thead><tr><th>Strategy</th><th>Draws</th><th>Avg White Hits</th><th>PB Hit</th><th>5+PB</th></tr></thead><tbody> ${rows.map(r=>`<tr><td>${escapeHtml(strategyName(r.strategy))}</td><td>${r.m.draws}</td><td>${r.avg.toFixed(2)}</td><td>${pct(r.m.pbHit,r.m.draws)}</td><td>${pct(r.m.fivePlusPb,r.m.draws)}</td></tr>`).join("")} </tbody></table></div> <p class="section-note">The backtest uses deterministic random seeds so the comparison is reproducible. Historical performance does not imply future predictive power.</p> `; } function downloadFile(filename,content,type){ const blob=new Blob( [content], {type} ); const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); } function exportCSV(){ const lines=[ "Date,White1,White2,White3,White4,White5,Mega Ball" ]; history.forEach(d=>{ lines.push([ d.date, ...d.white, d.pb ].join(",")); }); downloadFile( "mega-millions-history-v6.csv", lines.join("\n"), "text/csv" ); showToast("CSV exported"); } function exportJSON(){ const payload={ version:"6.3.1", exportedAt:new Date().toISOString(), draws:history, savedNumbers:savedNumbers, settings:{ workerUrl:settings.workerUrl, updateOnOpen:settings.updateOnOpen } }; downloadFile( "mega-millions-ai-lab-v6.json", JSON.stringify(payload,null,2), "application/json" ); showToast("JSON exported"); } function parseCSV(text){ const lines=text .replace(/\r/g,"") .split("\n") .map(x=>x.trim()) .filter(Boolean); if(lines.length<2){ throw new Error("CSV contains no data"); } const result=[]; for(let i=1;i<lines.length;i++){ const parts=lines[i].split(","); if(parts.length<7) continue; const d=normalizeDraw({ date:parts[0], white:[ Number(parts[1]), Number(parts[2]), Number(parts[3]), Number(parts[4]), Number(parts[5]) ], pb:Number(parts[6]) }); if(d){ result.push(d); } } return result; } function resetDatabase(){ if(!confirm( "Reset the historical Mega Millions database?\n\n"+ "Your saved numbers will NOT be deleted." )){ return; } history=normalizeHistory(SEED_DRAWS); saveHistory(); renderLatest(); renderStatistics(); $("backtestOutput").innerHTML=""; showToast("Historical database reset"); } $("generateBtn").addEventListener( "click", ()=>generateTickets() ); $("strategyWindow").addEventListener( "change", ()=>{ settings.strategyWindow=$("strategyWindow").value; safeSet(SETTINGS_KEY,settings); }); $("latestCount").addEventListener( "change", ()=>{ settings.latestCount=$("latestCount").value; safeSet(SETTINGS_KEY,settings); renderLatest(); }); $("statsWindow").addEventListener( "change", renderStatistics ); $("backtestBtn").addEventListener( "click", runBacktest ); $("saveManualBtn").addEventListener( "click", ()=>{ const ticket=getManualTicket(); if(ticket){ saveTicket(ticket,"Manual"); clearManual(); } } ); $("clearManualBtn").addEventListener( "click", clearManual ); $("saveSettingsBtn").addEventListener( "click", ()=>{ saveSettings(); showToast("Settings saved"); if(settings.workerUrl){ updateFromWorker("manual"); } } ); $("updateNowBtn").addEventListener( "click", ()=>{ saveSettings(); updateFromWorker("manual"); } ); $("refreshBtn").addEventListener( "click", ()=>{ saveSettings(); updateFromWorker("manual"); } ); $("csvFile").addEventListener( "change", async event=>{ const file=event.target.files[0]; if(!file) return; try{ const text=await file.text(); const imported=parseCSV(text); if(!imported.length){ throw new Error( "No valid Mega Millions rows found" ); } history=normalizeHistory([ ...history, ...imported ]); saveHistory(); renderLatest(); renderStatistics(); showToast( `${imported.length} drawing${imported.length===1?"":"s"} imported` ); }catch(error){ console.error(error); showToast( "CSV import failed: "+error.message ); }finally{ event.target.value=""; } } ); $("exportCsvBtn").addEventListener( "click", exportCSV ); $("exportJsonBtn").addEventListener( "click", exportJSON ); $("resetDbBtn").addEventListener( "click", resetDatabase ); function init(){ loadData(); renderLatest(); renderSaved(); renderStatistics(); automaticOpenUpdate(); } document.addEventListener( "DOMContentLoaded", init ); </script> </body> </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>Mega Millions AI Lab V6.3.1</title>
+
+<style>
+:root{
+ --bg:#0f172a; --card:#1e293b; --card2:#172033;
+ --text:#f1f5f9; --muted:#94a3b8;
+ --accent:#38bdf8; --accent2:#818cf8;
+ --success:#34d399; --danger:#fb7185;
+ --border:#334155; --shadow:0 10px 30px rgba(0,0,0,.25);
+}
+*{ box-sizing:border-box; }
+html{ background:var(--bg); }
+body{
+ margin:0;
+ background:
+ radial-gradient(circle at top left,rgba(56,189,248,.08),transparent 35%),
+ radial-gradient(circle at top right,rgba(129,140,248,.08),transparent 35%),
+ var(--bg);
+ color:var(--text);
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+ min-height:100vh;
+ padding:env(safe-area-inset-top) 12px calc(20px + env(safe-area-inset-bottom));
+}
+.container{ max-width:760px; margin:0 auto; }
+header{ text-align:center; padding:18px 4px 12px; }
+h1{
+ margin:0;
+ font-size:30px;
+ font-weight:800;
+ background:linear-gradient(90deg,var(--accent),var(--accent2));
+ -webkit-background-clip:text;
+ background-clip:text;
+ color:transparent;
+}
+.subtitle{ margin-top:5px; color:var(--muted); font-size:13px; }
+.card{
+ background:linear-gradient(145deg,rgba(30,41,59,.98),rgba(23,32,51,.98));
+ border:1px solid var(--border);
+ border-radius:18px;
+ padding:16px;
+ margin:12px 0;
+ box-shadow:var(--shadow);
+}
+.card h2{ margin:0 0 12px; font-size:18px; }
+.card h3{ margin:12px 0 8px; font-size:15px; }
+.jackpot{
+ text-align:center;
+ padding:20px 16px;
+ background:linear-gradient(135deg,rgba(56,189,248,.16),rgba(129,140,248,.18)),var(--card);
+}
+.jackpot-label{
+ color:var(--muted);
+ font-size:13px;
+ text-transform:uppercase;
+ letter-spacing:.08em;
+}
+.jackpot-value{ font-size:38px; font-weight:900; margin:4px 0; }
+.cash{ color:var(--success); font-size:15px; font-weight:700; }
+.next{ color:var(--muted); margin-top:6px; font-size:13px; }
+.status{
+ margin-top:10px;
+ padding:8px 10px;
+ border-radius:10px;
+ background:rgba(15,23,42,.55);
+ color:var(--muted);
+ font-size:12px;
+}
+.status.ok{ color:var(--success); }
+.status.error{ color:var(--danger); }
+.compact-card{ padding:12px 14px; }
+.compact-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:8px;
+ margin-bottom:7px;
+}
+.compact-head h2{ margin:0; font-size:16px; }
+.draw-row{
+ display:flex;
+ align-items:center;
+ gap:7px;
+ padding:7px 0;
+ border-bottom:1px solid rgba(51,65,85,.65);
+}
+.draw-row:last-child{ border-bottom:0; }
+.draw-date{ width:82px; color:var(--muted); font-size:11px; flex-shrink:0; }
+.balls{ display:flex; flex-wrap:wrap; gap:4px; align-items:center; }
+.ball{
+ width:29px;
+ height:29px;
+ border-radius:50%;
+ display:inline-flex;
+ justify-content:center;
+ align-items:center;
+ background:#f8fafc;
+ color:#0f172a;
+ font-weight:800;
+ font-size:12px;
+ box-shadow:inset 0 -2px 0 rgba(0,0,0,.15);
+}
+.ball.pb{
+ background:linear-gradient(135deg,#fb7185,#a855f7);
+ color:white;
+}
+button,select,input{ font:inherit; }
+button{ border:0; cursor:pointer; }
+.btn{
+ padding:10px 13px;
+ border-radius:11px;
+ color:white;
+ font-weight:700;
+ background:linear-gradient(135deg,var(--accent2),var(--accent));
+ box-shadow:0 5px 15px rgba(56,189,248,.12);
+}
+.btn.small{ padding:7px 10px; font-size:12px; }
+.btn.secondary{ background:#334155; }
+.btn.success{ background:linear-gradient(135deg,#059669,var(--success)); }
+.btn.danger{ background:linear-gradient(135deg,#be123c,var(--danger)); }
+.btn:disabled{ opacity:.5; cursor:not-allowed; }
+.controls{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.generator-header{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:10px;
+ margin-bottom:10px;
+}
+.generator-header h2{margin:0;}
+.generator-btn{
+ padding:7px 11px;
+ font-size:11px;
+ line-height:1.1;
+ white-space:nowrap;
+}
+.saved-top{margin-top:10px;}
+.manual-entry-wrap{
+ margin-top:12px;
+ padding-top:10px;
+ border-top:1px solid var(--border);
+}
+@media(max-width:520px){
+ .generator-header{gap:7px;margin-bottom:8px;}
+ .generator-header h2{font-size:17px;}
+ .generator-btn{padding:6px 9px;font-size:10px;}
+}
+.generator-controls{
+ grid-template-columns:minmax(0,1.25fr) minmax(0,.85fr) minmax(0,1.35fr);
+ align-items:end;
+}
+.strategy-window-group{grid-column:auto;}
+.manual-entry-head{
+ color:var(--muted);
+ font-size:12px;
+ font-weight:700;
+ margin:10px 0 5px;
+}
+.compact-manual-grid{
+ grid-template-columns:repeat(5,minmax(0,1fr)) minmax(48px,.75fr);
+ gap:5px;
+}
+.compact-manual-grid input{
+ min-width:0;
+ padding:7px 2px;
+ font-size:13px;
+}
+.manual-actions{margin-top:7px;}
+.manual-actions .btn{padding:7px 10px;font-size:11px;}
+.saved-edit-grid{
+ display:grid;
+ grid-template-columns:repeat(5,minmax(0,1fr)) minmax(48px,.8fr);
+ gap:5px;
+ margin-top:8px;
+}
+.saved-edit-grid input{
+ width:100%;
+ box-sizing:border-box;
+ min-width:0;
+ text-align:center;
+ padding:7px 2px;
+ border:1px solid var(--border);
+ border-radius:8px;
+ background:#1e293b;
+ color:white;
+ font-weight:700;
+}
+.saved-edit-grid input.pb-edit{border-color:#a855f7;}
+.saved-actions .update{
+ background:linear-gradient(135deg,#059669,var(--success));
+}
+@media(max-width:520px){
+ .generator-controls{
+  grid-template-columns:minmax(0,1.25fr) minmax(0,.85fr) minmax(0,1.35fr);
+  gap:5px;
+ }
+ .generator-controls select{min-width:0;width:100%;}
+ .compact-manual-grid,.saved-edit-grid{gap:4px;}
+ .compact-manual-grid input,.saved-edit-grid input{
+  font-size:12px;
+  padding:6px 1px;
+ }
+}
+.control-group{
+ display:flex;
+ flex-direction:column;
+ gap:5px;
+}
+.control-group.full{grid-column:1/-1;}
+label{
+ color:var(--muted);
+ font-size:12px;
+ font-weight:600;
+}
+select,input[type="number"],input[type="text"],input[type="url"]{
+ width:100%;
+ border:1px solid var(--border);
+ background:#0f172a;
+ color:var(--text);
+ border-radius:10px;
+ padding:10px;
+ outline:none;
+}
+select:focus,input:focus{border-color:var(--accent);}
+.generate-row{
+ display:grid;
+ grid-template-columns:1fr auto;
+ gap:10px;
+ margin-top:12px;
+}
+.ticket{
+ background:#0f172a;
+ border:1px solid var(--border);
+ border-radius:14px;
+ padding:12px;
+ margin-top:9px;
+}
+.ticket-top{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:9px;
+}
+.ticket-title{font-size:13px;font-weight:800;}
+.ticket-actions{display:flex;gap:6px;}
+.ticket-actions button{
+ font-size:11px;
+ padding:6px 8px;
+ border-radius:8px;
+ background:#334155;
+ color:white;
+}
+.ticket-actions .save-btn{
+ background:linear-gradient(135deg,#059669,var(--success));
+}
+.ticket-balls{
+ display:flex;
+ justify-content:center;
+ gap:7px;
+ flex-wrap:wrap;
+}
+.ticket-balls .ball{
+ width:38px;
+ height:38px;
+ font-size:14px;
+}
+.ticket-balls .ball.pb{
+ width:42px;
+ height:42px;
+ margin-left:5px;
+}
+.manual-grid{
+ display:grid;
+ grid-template-columns:repeat(5,1fr) 1fr;
+ gap:6px;
+}
+.manual-grid input{text-align:center;padding:9px 3px;}
+.saved-ticket{
+ background:#0f172a;
+ border:1px solid var(--border);
+ border-radius:12px;
+ padding:11px;
+ margin-top:8px;
+}
+.saved-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:8px;
+}
+.saved-name{font-weight:800;font-size:13px;}
+.saved-meta{color:var(--muted);font-size:10px;margin-top:3px;}
+.saved-actions{
+ display:flex;
+ gap:5px;
+ margin-top:8px;
+ flex-wrap:wrap;
+}
+.saved-actions button{
+ padding:7px 9px;
+ border-radius:8px;
+ background:#334155;
+ color:white;
+ font-size:11px;
+}
+.saved-actions .delete{background:#7f1d1d;}
+.empty{
+ color:var(--muted);
+ text-align:center;
+ padding:12px 4px;
+ font-size:13px;
+}
+.stats-subsection{
+ margin-top:14px;
+ padding-top:10px;
+ border-top:1px solid var(--border);
+}
+.stats-subsection:first-child{
+ margin-top:0;
+ padding-top:0;
+ border-top:0;
+}
+.section-note{
+ color:var(--muted);
+ font-size:11px;
+ line-height:1.5;
+}
+.stat-grid{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:8px;
+}
+.stat{
+ background:#0f172a;
+ border:1px solid var(--border);
+ border-radius:12px;
+ padding:11px;
+ text-align:center;
+}
+.stat-value{font-size:20px;font-weight:900;}
+.stat-label{font-size:10px;color:var(--muted);margin-top:2px;}
+.table-wrap{overflow-x:auto;}
+table{
+ width:100%;
+ border-collapse:collapse;
+ font-size:11px;
+}
+th,td{
+ padding:8px 5px;
+ border-bottom:1px solid var(--border);
+ text-align:center;
+ white-space:nowrap;
+}
+th{color:var(--accent);font-weight:800;}
+.progress{
+ height:9px;
+ background:#0f172a;
+ border-radius:99px;
+ overflow:hidden;
+ margin:10px 0;
+ border:1px solid var(--border);
+}
+.progress-bar{
+ width:0%;
+ height:100%;
+ background:linear-gradient(90deg,var(--accent),var(--accent2));
+ transition:width .2s;
+}
+.action-row{
+ display:flex;
+ flex-wrap:wrap;
+ gap:7px;
+ margin-top:10px;
+}
+.file-label{
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ padding:10px 13px;
+ border-radius:11px;
+ background:#334155;
+ color:white;
+ font-weight:700;
+ font-size:13px;
+ cursor:pointer;
+}
+.file-label input{display:none;}
+.checkbox-row{
+ display:flex;
+ align-items:center;
+ gap:8px;
+ margin-top:9px;
+ color:var(--muted);
+ font-size:12px;
+}
+.checkbox-row input{width:18px;height:18px;}
+footer{
+ color:var(--muted);
+ text-align:center;
+ font-size:10px;
+ line-height:1.5;
+ padding:10px 8px 20px;
+}
+.toast{
+ position:fixed;
+ left:50%;
+ bottom:calc(22px + env(safe-area-inset-bottom));
+ transform:translate(-50%,120px);
+ background:#020617;
+ border:1px solid var(--border);
+ color:white;
+ padding:11px 15px;
+ border-radius:12px;
+ box-shadow:var(--shadow);
+ font-size:12px;
+ z-index:9999;
+ transition:.25s;
+ max-width:90%;
+ text-align:center;
+}
+.toast.show{transform:translate(-50%,0);}
+.loading{opacity:.65;pointer-events:none;}
+@media(max-width:430px){
+ .manual-grid{grid-template-columns:repeat(5,1fr);}
+ .manual-grid .pb-input{grid-column:1/-1;}
+ .controls{grid-template-columns:1fr;}
+ .generator-controls{
+  grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr) minmax(0,1.3fr)!important;
+  gap:4px;
+ }
+ .generator-controls .control-group{min-width:0;}
+ .generator-controls label{font-size:10px;}
+ .generator-controls select{font-size:11px;padding:8px 5px;}
+ .generate-row{grid-template-columns:1fr;}
+ .draw-date{width:72px;}
+ .ball{width:27px;height:27px;}
+ .compact-head{gap:5px;}
+ .compact-head h2{font-size:15px;white-space:nowrap;}
+ #latestCount{
+  min-width:56px!important;
+  padding:6px 4px!important;
+  font-size:10px!important;
+ }
+ .compact-head .btn.small{padding:6px 7px;font-size:10px;}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+ <h1>Mega Millions AI Lab V6.3.1</h1>
+ <div class="subtitle">Version 6.3 • Statistics • Strategies • Backtesting</div>
+</header>
+
+<section class="card jackpot">
+ <div class="jackpot-label">Current Estimated Jackpot</div>
+ <div id="jackpot" class="jackpot-value">—</div>
+ <div id="cashValue" class="cash">Cash Value: —</div>
+ <div id="nextDrawing" class="next">Next Drawing: —</div>
+ <div id="ticketCost" class="next">Ticket Cost: $5 / Play</div>
+ <div id="syncStatus" class="status">Waiting for automatic update…</div>
+</section>
+
+<section class="card compact-card">
+ <div class="compact-head">
+  <h2 id="latestTitle">Last 2 Drawings</h2>
+  <div style="display:flex;align-items:center;gap:6px;min-width:0">
+   <select id="latestCount" aria-label="Number of latest drawings" style="width:auto;min-width:68px;padding:7px 8px;font-size:11px">
+    <option value="2" selected>2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+   </select>
+   <button class="btn small" id="refreshBtn">↻ Refresh</button>
+  </div>
+ </div>
+ <div id="latestDraws"></div>
+</section>
+
+<section class="card">
+ <div class="generator-header">
+  <h2>🎯 AI Ticket Generator</h2>
+  <button class="btn generator-btn" id="generateBtn">Generate Tickets</button>
+ </div>
+
+ <div class="controls generator-controls">
+
+  <div class="control-group">
+   <label for="strategy">Strategy</label>
+   <select id="strategy">
+    <option value="random">Random</option>
+    <option value="balanced">Balanced Odd / Even</option>
+    <option value="hot">Hot Numbers</option>
+    <option value="cold">Cold Numbers</option>
+    <option value="hotcold">Hot + Cold Mix</option>
+    <option value="spread">Good Spread</option>
+    <option value="weighted">Weighted Frequency</option>
+    <option value="weightedBalanced" selected>Weighted + Balanced ⭐</option>
+    <option value="lowhigh">Low + High Mix</option>
+    <option value="recency">Recency</option>
+    <option value="hybrid">Hybrid AI</option>
+    <option value="overdue">Overdue Numbers</option>
+    <option value="decades">Decade Spread</option>
+    <option value="sum">Sum Balanced</option>
+    <option value="pair">Pair Boost</option>
+   </select>
+  </div>
+
+  <div class="control-group">
+   <label for="ticketCount">Number of Tickets</label>
+   <select id="ticketCount">
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
+    <option>4</option>
+    <option>5</option>
+    <option>6</option>
+    <option>7</option>
+    <option>8</option>
+    <option>9</option>
+    <option>10</option>
+    <option>15</option>
+    <option>20</option>
+   </select>
+  </div>
+
+  <div class="control-group strategy-window-group">
+   <label for="strategyWindow">Strategy Analysis History</label>
+   <select id="strategyWindow">
+    <option value="20">Last 20 drawings</option>
+    <option value="30">Last 30 drawings</option>
+    <option value="50">Last 50 drawings</option>
+    <option value="100" selected>Last 100 drawings</option>
+    <option value="200">Last 200 drawings</option>
+    <option value="500">Last 500 drawings</option>
+    <option value="all">All Available Drawings</option>
+   </select>
+  </div>
+
+ </div>
+
+ <div id="generatedTickets"></div>
+</section>
+
+<section class="card">
+ <h2>💾 Saving Numbers</h2>
+
+ <div class="saved-top">
+  <div id="savedNumbers"></div>
+ </div>
+
+ <div class="manual-entry-wrap">
+  <div class="manual-entry-head">Manual Entry</div>
+
+  <div class="manual-grid compact-manual-grid">
+   <input id="m1" type="number" min="1" max="70" placeholder="1">
+   <input id="m2" type="number" min="1" max="70" placeholder="2">
+   <input id="m3" type="number" min="1" max="70" placeholder="3">
+   <input id="m4" type="number" min="1" max="70" placeholder="4">
+   <input id="m5" type="number" min="1" max="70" placeholder="5">
+   <input id="mpb" class="pb-input" type="number" min="1" max="24" placeholder="MB">
+  </div>
+
+  <div class="action-row">
+   <button class="btn success" id="saveManualBtn">Save Manual Numbers</button>
+   <button class="btn secondary" id="clearManualBtn">Clear</button>
+  </div>
+ </div>
+</section>
+
+<section class="card">
+ <h2>📊 Historical Statistics</h2>
+
+ <div class="controls">
+  <div class="control-group">
+   <label for="statsWindow">Analysis Window</label>
+   <select id="statsWindow">
+    <option value="20">Last 20</option>
+    <option value="30" selected>Last 30</option>
+    <option value="50">Last 50</option>
+    <option value="100">Last 100</option>
+    <option value="all">All Available</option>
+   </select>
+  </div>
+
+  <div class="control-group">
+   <label>Statistics</label>
+   <div class="section-note" style="padding:10px;border:1px solid var(--border);border-radius:10px;background:#0f172a">
+    White Balls + Mega Ball
+   </div>
+  </div>
+ </div>
+
+ <div id="statsDataInfo" class="section-note" style="margin-top:8px"></div>
+ <div id="statsOutput" style="margin-top:12px"></div>
+</section>
+
+<section class="card">
+ <h2>🧪 Walk-Forward Backtesting</h2>
+
+ <p class="section-note">
+  Each historical draw is tested using only draws that occurred before it.
+  This prevents future information from leaking into the training data.
+  Results are historical research, not predictions.
+ </p>
+
+ <div class="controls">
+  <div class="control-group">
+   <label for="minTraining">Minimum Training Draws</label>
+   <select id="minTraining">
+    <option value="10">10</option>
+    <option value="15" selected>15</option>
+    <option value="20">20</option>
+    <option value="30">30</option>
+    <option value="50">50</option>
+   </select>
+  </div>
+
+  <div class="control-group">
+   <label for="recencyWindow">Recency Window</label>
+   <select id="recencyWindow">
+    <option value="10">10</option>
+    <option value="20" selected>20</option>
+    <option value="30">30</option>
+    <option value="60">60</option>
+    <option value="120">120</option>
+   </select>
+  </div>
+ </div>
+
+ <button class="btn" id="backtestBtn" style="margin-top:12px">
+  Run Walk-Forward Backtest
+ </button>
+
+ <div id="progressArea" style="display:none">
+  <div class="progress">
+   <div id="progressBar" class="progress-bar"></div>
+  </div>
+  <div id="progressText" class="section-note">Running…</div>
+ </div>
+
+ <div id="backtestOutput" style="margin-top:12px"></div>
+</section> <section class="card">
+ <h2>🔄 Automatic Update</h2>
+
+ <div class="control-group">
+  <label for="workerUrl">Cloudflare Worker URL</label>
+  <input id="workerUrl" type="url" placeholder="https://your-worker.workers.dev">
+ </div>
+
+ <div class="checkbox-row">
+  <input type="checkbox" id="updateOnOpen" checked>
+  <label for="updateOnOpen">
+   Automatically update every time the app opens or returns to foreground
+  </label>
+ </div>
+
+ <div class="action-row">
+  <button class="btn" id="saveSettingsBtn">Save Settings</button>
+  <button class="btn secondary" id="updateNowBtn">Update Now</button>
+ </div>
+
+ <div id="updateMessage" class="status">
+  Automatic updates use your Cloudflare Worker.
+ </div>
+</section>
+
+<section class="card">
+ <h2>🗄 Data Tools</h2>
+
+ <div class="action-row">
+  <button class="btn secondary" id="exportCsvBtn">Export CSV</button>
+  <button class="btn secondary" id="exportJsonBtn">Export JSON</button>
+
+  <label class="file-label">
+   Import CSV
+   <input id="csvFile" type="file" accept=".csv,text/csv">
+  </label>
+ </div>
+
+ <div class="action-row">
+  <button class="btn danger" id="resetDbBtn">
+   Reset Historical Database
+  </button>
+ </div>
+
+ <p class="section-note">
+  Historical results are stored locally in your browser.
+  Resetting the historical database does not delete your saved numbers.
+ </p>
+</section>
+
+<footer>
+ Mega Millions AI Lab V6<br>
+ For research and entertainment only. No strategy can predict a random
+ Mega Millions drawing or improve the mathematical odds of a ticket.
+</footer>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+"use strict";
+
+/* ============================================================
+   MEGA MILLIONS AI LAB V6.3.1
+   Based directly on Powerball AI Lab V6.3.1
+   ============================================================ */
+
+const STORAGE_KEY = "mega_millions_ai_lab_v6_draws";
+const SETTINGS_KEY = "mega_millions_ai_lab_v6_settings";
+const SAVED_KEY = "mega_millions_ai_lab_v6_saved_numbers";
+
+const OLD_STORAGE_KEY = "mega_millions_ai_lab_v5_draws";
+const OLD_SETTINGS_KEY = "mega_millions_ai_lab_v5_settings";
+
+/*
+ Historical Mega Millions data can contain Mega Ball 25
+ because the pre-April-2025 game used 1–25.
+
+ New Mega Millions tickets use Mega Ball 1–24.
+*/
+
+const SEED_DRAWS = [
+ {date:"2026-09-11",white:[8,21,34,48,63],pb:12},
+ {date:"2026-09-08",white:[4,17,28,55,69],pb:7},
+ {date:"2026-09-04",white:[11,24,37,52,66],pb:19},
+ {date:"2026-09-01",white:[6,15,31,44,70],pb:3},
+ {date:"2026-08-28",white:[9,22,35,47,61],pb:14},
+ {date:"2026-08-25",white:[2,18,29,54,68],pb:21},
+ {date:"2026-08-21",white:[13,27,39,56,64],pb:8},
+ {date:"2026-08-18",white:[5,16,33,45,59],pb:23},
+ {date:"2026-08-14",white:[7,20,32,50,67],pb:10},
+ {date:"2026-08-11",white:[3,26,41,58,65],pb:4},
+ {date:"2026-08-07",white:[12,23,38,49,62],pb:17},
+ {date:"2026-08-04",white:[1,19,30,53,60],pb:6},
+ {date:"2026-07-31",white:[10,25,36,51,69],pb:22},
+ {date:"2026-07-28",white:[14,21,40,57,63],pb:5},
+ {date:"2026-07-24",white:[6,18,34,46,70],pb:16},
+ {date:"2026-07-21",white:[9,27,42,55,68],pb:2},
+ {date:"2026-07-17",white:[4,15,31,48,64],pb:13},
+ {date:"2026-07-14",white:[8,22,39,52,61],pb:20},
+ {date:"2026-07-10",white:[3,17,29,44,66],pb:9},
+ {date:"2026-07-07",white:[11,24,37,50,59],pb:18},
+ {date:"2026-07-03",white:[5,20,33,56,67],pb:11},
+ {date:"2026-06-30",white:[2,16,28,45,63],pb:24},
+ {date:"2026-06-26",white:[7,19,35,53,69],pb:1},
+ {date:"2026-06-23",white:[12,26,41,58,65],pb:15},
+ {date:"2026-06-19",white:[4,21,32,47,60],pb:6},
+ {date:"2026-06-16",white:[9,18,38,54,70],pb:22},
+ {date:"2026-06-12",white:[6,23,36,49,62],pb:14},
+ {date:"2026-06-09",white:[1,17,30,51,68],pb:4},
+ {date:"2026-06-05",white:[8,25,40,55,64],pb:19},
+ {date:"2026-06-02",white:[13,29,34,46,67],pb:10}
+];
+
+let history = [];
+let savedNumbers = [];
+
+let settings = {
+ workerUrl:"",
+ updateOnOpen:true,
+ strategyWindow:"100",
+ latestCount:"2"
+};
+
+let lastSyncTime = 0;
+let updateInProgress = false;
+
+const $ = id => document.getElementById(id);
+
+function safeGet(key,fallback=null){
+ try{
+  const raw=localStorage.getItem(key);
+  if(raw===null) return fallback;
+  return JSON.parse(raw);
+ }catch(e){
+  return fallback;
+ }
+}
+
+function safeSet(key,value){
+ try{
+  localStorage.setItem(key,JSON.stringify(value));
+  return true;
+ }catch(e){
+  return false;
+ }
+}
+
+function normalizeDraw(d){
+ if(!d) return null;
+
+ const date=String(
+  d.date ||
+  d.drawDate ||
+  d.draw_date ||
+  ""
+ ).slice(0,10);
+
+ let white=[];
+
+ if(Array.isArray(d.white)){
+  white=d.white.map(Number);
+ }
+ else if(Array.isArray(d.numbers)){
+  white=d.numbers.slice(0,5).map(Number);
+ }
+ else if(typeof d.winning_numbers==="string"){
+  white=d.winning_numbers
+   .trim()
+   .split(/\s+/)
+   .slice(0,5)
+   .map(Number);
+ }
+
+ const pb=Number(
+  d.pb ??
+  d.megaBall ??
+  d.mega_ball ??
+  d.megaBallNumber ??
+  d.mega_ball_number ??
+  d.redBall
+ );
+
+ if(!date) return null;
+ if(white.length!==5) return null;
+
+ if(
+  white.some(
+   n=>!Number.isInteger(n)||n<1||n>70
+  )
+ ) return null;
+
+ if(new Set(white).size!==5) return null;
+
+ /*
+   Accept 1–25 for historical records.
+   Generation itself uses only 1–24.
+ */
+ if(
+  !Number.isInteger(pb)||
+  pb<1||
+  pb>25
+ ) return null;
+
+ return {
+  date,
+  white:[...white].sort((a,b)=>a-b),
+  pb
+ };
+}
+
+function normalizeHistory(arr){
+ if(!Array.isArray(arr)) return [];
+
+ const map=new Map();
+
+ arr.forEach(d=>{
+  const n=normalizeDraw(d);
+  if(n) map.set(n.date,n);
+ });
+
+ return [...map.values()]
+  .sort((a,b)=>a.date.localeCompare(b.date));
+}
+
+function loadData(){
+
+ let stored=safeGet(STORAGE_KEY,null);
+
+ if(!stored){
+  const old=safeGet(OLD_STORAGE_KEY,null);
+
+  if(Array.isArray(old)){
+   stored=old;
+  }
+  else if(old&&Array.isArray(old.draws)){
+   stored=old.draws;
+  }
+ }
+
+ history=normalizeHistory(stored);
+
+ if(history.length===0){
+  history=normalizeHistory(SEED_DRAWS);
+  saveHistory();
+ }
+
+ const storedSettings=safeGet(SETTINGS_KEY,null);
+
+ if(
+  storedSettings &&
+  typeof storedSettings==="object"
+ ){
+  settings={
+   ...settings,
+   ...storedSettings
+  };
+ }
+ else{
+  const oldSettings=safeGet(OLD_SETTINGS_KEY,null);
+
+  if(
+   oldSettings &&
+   typeof oldSettings==="object"
+  ){
+   settings={
+    ...settings,
+    ...oldSettings
+   };
+
+   safeSet(
+    SETTINGS_KEY,
+    settings
+   );
+  }
+ }
+
+ const storedSaved=safeGet(
+  SAVED_KEY,
+  []
+ );
+
+ if(Array.isArray(storedSaved)){
+  savedNumbers=storedSaved;
+ }
+
+ $("workerUrl").value=
+  settings.workerUrl||"";
+
+ $("updateOnOpen").checked=
+  settings.updateOnOpen!==false;
+
+ if($("strategyWindow")){
+  $("strategyWindow").value=
+   settings.strategyWindow||"100";
+ }
+
+ if($("latestCount")){
+  $("latestCount").value=
+   settings.latestCount||"2";
+ }
+}
+
+function saveHistory(){
+ safeSet(STORAGE_KEY,history);
+}
+
+function saveSaved(){
+ safeSet(SAVED_KEY,savedNumbers);
+}
+
+function saveSettings(){
+
+ settings.workerUrl=
+  $("workerUrl").value.trim();
+
+ settings.updateOnOpen=
+  $("updateOnOpen").checked;
+
+ settings.strategyWindow=
+  $("strategyWindow")
+   ? $("strategyWindow").value
+   : (settings.strategyWindow||"100");
+
+ settings.latestCount=
+  $("latestCount")
+   ? $("latestCount").value
+   : (settings.latestCount||"2");
+
+ safeSet(
+  SETTINGS_KEY,
+  settings
+ );
+}
+
+function escapeHtml(str){
+ return String(str)
+  .replaceAll("&","&amp;")
+  .replaceAll("<","&lt;")
+  .replaceAll(">","&gt;")
+  .replaceAll('"',"&quot;")
+  .replaceAll("'","&#039;");
+}
+
+function formatDate(date){
+ if(!date) return "—";
+
+ const d=new Date(
+  date+"T12:00:00"
+ );
+
+ if(Number.isNaN(d.getTime())){
+  return date;
+ }
+
+ return d.toLocaleDateString(
+  undefined,
+  {
+   month:"short",
+   day:"numeric",
+   year:"numeric"
+  }
+ );
+}
+
+function formatDrawingDate(date){
+
+ if(!date) return "—";
+
+ const raw=String(date).trim();
+
+ if(
+  /^(SUN|MON|TUE|WED|THU|FRI|SAT)\b/i.test(raw)
+ ){
+  return raw;
+ }
+
+ let d=new Date(
+  raw.includes("T")
+   ? raw
+   : raw+"T12:00:00"
+ );
+
+ if(Number.isNaN(d.getTime())){
+  d=new Date(raw);
+ }
+
+ if(Number.isNaN(d.getTime())){
+  return raw;
+ }
+
+ return d.toLocaleDateString(
+  undefined,
+  {
+   weekday:"short",
+   month:"short",
+   day:"numeric",
+   year:"numeric"
+  }
+ );
+}
+
+function formatMoney(v){
+
+ if(
+  v===null||
+  v===undefined||
+  v===""
+ ){
+  return "—";
+ }
+
+ if(typeof v==="number"){
+  return "$"+v.toLocaleString();
+ }
+
+ const s=String(v);
+
+ if(s.includes("$")){
+  return s;
+ }
+
+ return "$"+s;
+}
+
+function showToast(message){
+
+ const t=$("toast");
+
+ t.textContent=message;
+ t.classList.add("show");
+
+ clearTimeout(showToast.timer);
+
+ showToast.timer=setTimeout(()=>{
+  t.classList.remove("show");
+ },2600);
+}
+
+function randomInt(
+ min,
+ max,
+ rng=Math.random
+){
+ return Math.floor(
+  rng()*(max-min+1)
+ )+min;
+}
+
+function shuffle(
+ arr,
+ rng=Math.random
+){
+ const a=[...arr];
+
+ for(
+  let i=a.length-1;
+  i>0;
+  i--
+ ){
+  const j=Math.floor(
+   rng()*(i+1)
+  );
+
+  [a[i],a[j]]=[
+   a[j],a[i]
+  ];
+ }
+
+ return a;
+}
+
+function sampleUnique(
+ range,
+ count,
+ rng=Math.random
+){
+ return shuffle(
+  range,
+  rng
+ )
+ .slice(0,count)
+ .sort((a,b)=>a-b);
+}
+
+function allWhite(){
+ return Array.from(
+  {length:70},
+  (_,i)=>i+1
+ );
+}
+
+/*
+ Mega Ball playable range:
+ 1–24.
+*/
+function allPB(){
+ return Array.from(
+  {length:24},
+  (_,i)=>i+1
+ );
+}
+
+function mean(arr){
+ if(!arr.length) return 0;
+
+ return arr.reduce(
+  (a,b)=>a+b,
+  0
+ )/arr.length;
+}
+
+function median(arr){
+
+ if(!arr.length) return 0;
+
+ const a=[...arr]
+  .sort((x,y)=>x-y);
+
+ const mid=Math.floor(
+  a.length/2
+ );
+
+ return a.length%2
+  ? a[mid]
+  : (a[mid-1]+a[mid])/2;
+}
+
+function countsWhite(data){
+
+ const c={};
+
+ for(
+  let i=1;
+  i<=70;
+  i++
+ ){
+  c[i]=0;
+ }
+
+ data.forEach(d=>{
+  d.white.forEach(n=>{
+   c[n]++;
+  });
+ });
+
+ return c;
+}
+
+function countsPB(data){
+
+ const c={};
+
+ /*
+ Historical Mega Ball 25 is retained
+ for statistics.
+ */
+ for(
+  let i=1;
+  i<=25;
+  i++
+ ){
+  c[i]=0;
+ }
+
+ data.forEach(d=>{
+  if(
+   Number.isInteger(d.pb)&&
+   d.pb>=1&&
+   d.pb<=25
+  ){
+   c[d.pb]++;
+  }
+ });
+
+ return c;
+}
+
+function lastSeenAges(
+ data,
+ maxNum,
+ type="white"
+){
+
+ const ages={};
+
+ for(
+  let n=1;
+  n<=maxNum;
+  n++
+ ){
+  ages[n]=data.length+1;
+ }
+
+ for(
+  let i=data.length-1;
+  i>=0;
+  i--
+ ){
+
+  const age=data.length-1-i;
+
+  const nums=
+   type==="pb"
+    ? [data[i].pb]
+    : data[i].white;
+
+  nums.forEach(n=>{
+   if(ages[n]>age){
+    ages[n]=age;
+   }
+  });
+ }
+
+ return ages;
+}
+
+function weightedPick(
+ items,
+ weights,
+ rng=Math.random
+){
+
+ let total=0;
+
+ const safe=weights.map(w=>{
+  const x=Number(w);
+
+  return Number.isFinite(x)&&x>0
+   ? x
+   : 0;
+ });
+
+ total=safe.reduce(
+  (a,b)=>a+b,
+  0
+ );
+
+ if(total<=0){
+  return items[
+   randomInt(
+    0,
+    items.length-1,
+    rng
+   )
+  ];
+ }
+
+ let r=rng()*total;
+
+ for(
+  let i=0;
+  i<items.length;
+  i++
+ ){
+
+  r-=safe[i];
+
+  if(r<=0){
+   return items[i];
+  }
+ }
+
+ return items[
+  items.length-1
+ ];
+}
+
+function selectWeightedUnique(
+ items,
+ weights,
+ count,
+ rng=Math.random
+){
+
+ const pool=[...items];
+ const ws=[...weights];
+ const result=[];
+
+ while(
+  result.length<count &&
+  pool.length
+ ){
+
+  const pick=weightedPick(
+   pool,
+   ws,
+   rng
+  );
+
+  const idx=pool.indexOf(pick);
+
+  result.push(pick);
+
+  pool.splice(idx,1);
+  ws.splice(idx,1);
+ }
+
+ return result.sort(
+  (a,b)=>a-b
+ );
+}
+
+function normalizeWeights(weights){
+ const max=Math.max(
+  ...weights,
+  1
+ );
+
+ return weights.map(
+  w=>w/max
+ );
+}
+
+function getScores(
+ data,
+ strategy
+){
+
+ const c=countsWhite(data);
+ const ages=lastSeenAges(
+  data,
+  70
+ );
+
+ const freq=allWhite()
+  .map(n=>c[n]);
+
+ const maxFreq=Math.max(
+  ...freq,
+  1
+ );
+
+ const freqScore=n=>{
+  return (
+   (c[n]+1)/
+   (maxFreq+1)
+  );
+ };
+
+ const recencyScore=n=>{
+  return Math.exp(
+   -ages[n]/8
+  );
+ };
+
+ const overdueScore=n=>{
+  return ages[n]+1;
+ };
+
+ switch(strategy){
+
+  case "hot":
+   return allWhite().map(
+    n=>Math.pow(c[n]+1,1.7)
+   );
+
+  case "cold":
+   return allWhite().map(
+    n=>1/(c[n]+1)
+   );
+
+  case "weighted":
+   return allWhite().map(
+    n=>c[n]+1
+   );
+
+  case "recency":
+   return allWhite().map(
+    n=>recencyScore(n)
+   );
+
+  case "hybrid":
+   return allWhite().map(
+    n=>
+     .55*freqScore(n)+
+     .45*recencyScore(n)
+   );
+
+  case "overdue":
+   return allWhite().map(
+    n=>overdueScore(n)
+   );
+
+  case "weightedBalanced":
+   return allWhite().map(n=>{
+    const odd=
+     n%2===1
+      ? 1.15
+      : 1;
+
+    return (c[n]+1)*odd;
+   });
+
+  default:
+   return allWhite().map(
+    ()=>1
+   );
+ }
+}
+
+function generatePB(
+ strategy,
+ data,
+ rng=Math.random
+){
+
+ if(
+  strategy==="random"||
+  strategy==="balanced"||
+  strategy==="spread"||
+  strategy==="lowhigh"||
+  strategy==="decades"||
+  strategy==="sum"
+ ){
+  return randomInt(
+   1,
+   24,
+   rng
+  );
+ }
+
+ const nums=allPB();
+ const c=countsPB(data);
+ const ages=lastSeenAges(
+  data,
+  24,
+  "pb"
+ );
+
+ let weights;
+
+ switch(strategy){
+
+  case "hot":
+   weights=nums.map(
+    n=>Math.pow(c[n]+1,1.7)
+   );
+   break;
+
+  case "cold":
+   weights=nums.map(
+    n=>1/(c[n]+1)
+   );
+   break;
+
+  case "weighted":
+  case "weightedBalanced":
+   weights=nums.map(
+    n=>c[n]+1
+   );
+   break;
+
+  case "recency":
+   weights=nums.map(
+    n=>Math.exp(-ages[n]/8)
+   );
+   break;
+
+  case "hybrid":
+   weights=nums.map(n=>{
+    const max=Math.max(
+     ...Object.values(c),
+     1
+    );
+
+    const f=
+     (c[n]+1)/
+     (max+1);
+
+    const r=
+     Math.exp(-ages[n]/8);
+
+    return .55*f+.45*r;
+   });
+   break;
+
+  case "overdue":
+   weights=nums.map(
+    n=>ages[n]+1
+   );
+   break;
+
+  case "hotcold":
+   weights=nums.map(n=>{
+    return (
+     (c[n]+1)*
+     (ages[n]+1)/
+     Math.max(data.length,1)
+    );
+   });
+   break;
+
+  case "pair":
+   weights=nums.map(
+    n=>c[n]+1
+   );
+   break;
+
+  default:
+   weights=nums.map(()=>1);
+ }
+
+ return weightedPick(
+  nums,
+  weights,
+  rng
+ );
+} function generateBalanced(
+ data,
+ rng
+){
+
+ const odd=allWhite()
+  .filter(n=>n%2);
+
+ const even=allWhite()
+  .filter(n=>n%2===0);
+
+ const oddCount=
+  rng()<.5 ? 2 : 3;
+
+ return [
+  ...sampleUnique(
+   odd,
+   oddCount,
+   rng
+  ),
+  ...sampleUnique(
+   even,
+   5-oddCount,
+   rng
+  )
+ ].sort((a,b)=>a-b);
+}
+
+function generateSpread(
+ data,
+ rng
+){
+
+ const low=Array.from(
+  {length:23},
+  (_,i)=>i+1
+ );
+
+ const mid=Array.from(
+  {length:24},
+  (_,i)=>i+24
+ );
+
+ const high=Array.from(
+  {length:23},
+  (_,i)=>i+48
+ );
+
+ let result=[
+  ...sampleUnique(low,1,rng),
+  ...sampleUnique(mid,1,rng),
+  ...sampleUnique(high,1,rng)
+ ];
+
+ const remaining=
+  allWhite().filter(
+   n=>!result.includes(n)
+  );
+
+ result=[
+  ...result,
+  ...sampleUnique(
+   remaining,
+   2,
+   rng
+  )
+ ];
+
+ return result.sort(
+  (a,b)=>a-b
+ );
+}
+
+function generateHotCold(
+ data,
+ rng
+){
+
+ const c=countsWhite(data);
+
+ const sorted=allWhite()
+  .sort(
+   (a,b)=>c[b]-c[a]||a-b
+  );
+
+ const hotPool=
+  sorted.slice(0,20);
+
+ const coldPool=
+  sorted.slice(-20);
+
+ let result=
+  sampleUnique(
+   hotPool,
+   3,
+   rng
+  );
+
+ const coldCandidates=
+  coldPool.filter(
+   n=>!result.includes(n)
+  );
+
+ result=[
+  ...result,
+  ...sampleUnique(
+   coldCandidates,
+   2,
+   rng
+  )
+ ];
+
+ result=[
+  ...new Set(result)
+ ];
+
+ while(result.length<5){
+
+  const n=randomInt(
+   1,
+   70,
+   rng
+  );
+
+  if(!result.includes(n)){
+   result.push(n);
+  }
+ }
+
+ return result.sort(
+  (a,b)=>a-b
+ );
+}
+
+function generateLowHigh(
+ data,
+ rng
+){
+
+ const low=Array.from(
+  {length:35},
+  (_,i)=>i+1
+ );
+
+ const high=Array.from(
+  {length:35},
+  (_,i)=>i+36
+ );
+
+ const lowCount=
+  rng()<.5 ? 2 : 3;
+
+ return [
+  ...sampleUnique(
+   low,
+   lowCount,
+   rng
+  ),
+  ...sampleUnique(
+   high,
+   5-lowCount,
+   rng
+  )
+ ].sort((a,b)=>a-b);
+}
+
+function generateDecades(
+ data,
+ rng
+){
+
+ const decades=[
+  [1,10],
+  [11,20],
+  [21,30],
+  [31,40],
+  [41,50],
+  [51,60],
+  [61,70]
+ ];
+
+ let result=[];
+
+ const chosen=
+  shuffle(
+   decades.map((d,i)=>i),
+   rng
+  ).slice(0,5);
+
+ chosen.forEach(i=>{
+  result.push(
+   randomInt(
+    decades[i][0],
+    decades[i][1],
+    rng
+   )
+  );
+ });
+
+ return result.sort(
+  (a,b)=>a-b
+ );
+}
+
+function generateSumBalanced(
+ data,
+ rng
+){
+
+ const sums=data.map(
+  d=>d.white.reduce(
+   (a,b)=>a+b,
+   0
+  )
+ );
+
+ const target=median(sums);
+
+ let best=null;
+ let bestDiff=Infinity;
+
+ for(let i=0;i<120;i++){
+
+  const ticket=
+   sampleUnique(
+    allWhite(),
+    5,
+    rng
+   );
+
+  const sum=
+   ticket.reduce(
+    (a,b)=>a+b,
+    0
+   );
+
+  const diff=
+   Math.abs(sum-target);
+
+  if(diff<bestDiff){
+   best=ticket;
+   bestDiff=diff;
+  }
+
+  if(diff<=8) break;
+ }
+
+ return best.sort(
+  (a,b)=>a-b
+ );
+}
+
+function generatePairBoost(
+ data,
+ rng
+){
+
+ if(!data.length){
+  return sampleUnique(
+   allWhite(),
+   5,
+   rng
+  );
+ }
+
+ const counts=
+  countsWhite(data);
+
+ const pair={};
+
+ data.forEach(d=>{
+
+  const nums=d.white;
+
+  for(
+   let i=0;
+   i<nums.length;
+   i++
+  ){
+
+   for(
+    let j=i+1;
+    j<nums.length;
+    j++
+   ){
+
+    const a=nums[i];
+    const b=nums[j];
+
+    const key=
+     a+"-"+b;
+
+    pair[key]=
+     (pair[key]||0)+1;
+   }
+  }
+ });
+
+ let result=[];
+
+ const firstPool=
+  allWhite();
+
+ const firstWeights=
+  firstPool.map(
+   n=>counts[n]+1
+  );
+
+ result.push(
+  weightedPick(
+   firstPool,
+   firstWeights,
+   rng
+  )
+ );
+
+ while(result.length<5){
+
+  const candidates=
+   allWhite().filter(
+    n=>!result.includes(n)
+   );
+
+  const weights=
+   candidates.map(n=>{
+
+    let score=
+     counts[n]+1;
+
+    result.forEach(
+     existing=>{
+
+      const a=
+       Math.min(
+        existing,
+        n
+       );
+
+      const b=
+       Math.max(
+        existing,
+        n
+       );
+
+      score+=
+       2*(pair[a+"-"+b]||0);
+     }
+    );
+
+    return score;
+   });
+
+  result.push(
+   weightedPick(
+    candidates,
+    weights,
+    rng
+   )
+  );
+ }
+
+ return result.sort(
+  (a,b)=>a-b
+ );
+}
+
+function generateTicket(
+ strategy,
+ data,
+ rng=Math.random
+){
+
+ let white;
+
+ switch(strategy){
+
+  case "random":
+   white=sampleUnique(
+    allWhite(),
+    5,
+    rng
+   );
+   break;
+
+  case "balanced":
+   white=generateBalanced(
+    data,
+    rng
+   );
+   break;
+
+  case "hot":
+   white=selectWeightedUnique(
+    allWhite(),
+    getScores(data,"hot"),
+    5,
+    rng
+   );
+   break;
+
+  case "cold":
+   white=selectWeightedUnique(
+    allWhite(),
+    getScores(data,"cold"),
+    5,
+    rng
+   );
+   break;
+
+  case "hotcold":
+   white=generateHotCold(
+    data,
+    rng
+   );
+   break;
+
+  case "spread":
+   white=generateSpread(
+    data,
+    rng
+   );
+   break;
+
+  case "weighted":
+   white=selectWeightedUnique(
+    allWhite(),
+    getScores(data,"weighted"),
+    5,
+    rng
+   );
+   break;
+
+  case "weightedBalanced":
+
+   white=selectWeightedUnique(
+    allWhite(),
+    getScores(
+     data,
+     "weightedBalanced"
+    ),
+    5,
+    rng
+   );
+
+   let tries=0;
+
+   while(
+    tries<40 &&
+    !isBalanced(white)
+   ){
+
+    white=selectWeightedUnique(
+     allWhite(),
+     getScores(
+      data,
+      "weightedBalanced"
+     ),
+     5,
+     rng
+    );
+
+    tries++;
+   }
+
+   break;
+
+  case "lowhigh":
+   white=generateLowHigh(
+    data,
+    rng
+   );
+   break;
+
+  case "recency":
+   white=selectWeightedUnique(
+    allWhite(),
+    getScores(data,"recency"),
+    5,
+    rng
+   );
+   break;
+
+  case "hybrid":
+   white=selectWeightedUnique(
+    allWhite(),
+    getScores(data,"hybrid"),
+    5,
+    rng
+   );
+   break;
+
+  case "overdue":
+   white=selectWeightedUnique(
+    allWhite(),
+    getScores(data,"overdue"),
+    5,
+    rng
+   );
+   break;
+
+  case "decades":
+   white=generateDecades(
+    data,
+    rng
+   );
+   break;
+
+  case "sum":
+   white=generateSumBalanced(
+    data,
+    rng
+   );
+   break;
+
+  case "pair":
+   white=generatePairBoost(
+    data,
+    rng
+   );
+   break;
+
+  default:
+   white=sampleUnique(
+    allWhite(),
+    5,
+    rng
+   );
+ }
+
+ return {
+  white:white.sort(
+   (a,b)=>a-b
+  ),
+  pb:generatePB(
+   strategy,
+   data,
+   rng
+  )
+ };
+}
+
+function isBalanced(white){
+
+ const odd=
+  white.filter(
+   n=>n%2
+  ).length;
+
+ return odd===2||odd===3;
+}
+
+function ballsHtml(
+ white,
+ pb
+){
+
+ return `
+ <div class="balls">
+  ${white.map(
+   n=>`
+   <span class="ball">${n}</span>
+   `
+  ).join("")}
+  <span class="ball pb">${pb}</span>
+ </div>
+ `;
+}
+
+function renderLatest(){
+
+ const target=
+  $("latestDraws");
+
+ const count=Math.min(
+  10,
+  Math.max(
+   2,
+   Number(
+    $("latestCount")?.value||
+    settings.latestCount||
+    2
+   )
+  )
+ );
+
+ if($("latestTitle")){
+  $("latestTitle").textContent=
+   `Last ${count} Drawings`;
+ }
+
+ const latest=[
+  ...history
+ ]
+ .sort(
+  (a,b)=>
+   b.date.localeCompare(a.date)
+ )
+ .slice(0,count);
+
+ if(!latest.length){
+
+  target.innerHTML=
+   `<div class="empty">
+    No drawings available.
+   </div>`;
+
+  return;
+ }
+
+ target.innerHTML=
+  latest.map(d=>`
+   <div class="draw-row">
+    <div class="draw-date">
+     ${escapeHtml(
+      formatDrawingDate(d.date)
+     )}
+    </div>
+    ${ballsHtml(
+     d.white,
+     d.pb
+    )}
+   </div>
+  `).join("");
+}
+
+function getStatsData(){
+
+ const value=
+  $("statsWindow").value;
+
+ const ordered=[
+  ...history
+ ].sort(
+  (a,b)=>
+   a.date.localeCompare(b.date)
+ );
+
+ if(value==="all"){
+  return ordered;
+ }
+
+ const requested=
+  Number(value);
+
+ return requested>0
+  ? ordered.slice(-requested)
+  : ordered;
+}
+
+function renderStatistics(){
+
+ const data=
+  getStatsData();
+
+ const available=
+  history.length;
+
+ const selected=
+  $("statsWindow").value;
+
+ const requested=
+  selected==="all"
+   ? available
+   : Number(selected);
+
+ const analyzed=
+  data.length;
+
+ if($("statsDataInfo")){
+
+  $("statsDataInfo").innerHTML=
+   selected==="all"
+    ? `<strong>
+       Drawings Analyzed: ${analyzed}
+      </strong>
+      of ${available} available drawings.`
+    : `<strong>
+       Drawings Analyzed: ${analyzed}
+      </strong>
+      (latest ${Math.min(
+       requested,
+       available
+      )} of ${available} available drawings)`;
+ }
+
+ $("statsOutput").innerHTML="";
+
+ if(!data.length){
+
+  $("statsOutput").innerHTML=
+   `<div class="empty">
+    No historical data.
+   </div>`;
+
+  return;
+ }
+
+ renderWhiteStats(data);
+ renderPBStats(data);
+}
+
+function renderWhiteStats(data){
+
+ const c=countsWhite(data);
+ const nums=allWhite();
+
+ const hot=[
+  ...nums
+ ]
+ .sort(
+  (a,b)=>c[b]-c[a]||a-b
+ )
+ .slice(0,10);
+
+ const cold=[
+  ...nums
+ ]
+ .sort(
+  (a,b)=>c[a]-c[b]||a-b
+ )
+ .slice(0,10);
+
+ const oddCount=
+  data.map(
+   d=>d.white.filter(
+    n=>n%2
+   ).length
+  );
+
+ const sums=
+  data.map(
+   d=>d.white.reduce(
+    (a,b)=>a+b,
+    0
+   )
+  );
+
+ $("statsOutput").innerHTML+=`
+ <div class="stats-subsection">
+
+  <h3>⚪ White Ball Statistics</h3>
+
+  <div class="stat-grid">
+
+   <div class="stat">
+    <div class="stat-value">
+     ${Math.round(mean(sums))}
+    </div>
+    <div class="stat-label">
+     Average White Sum
+    </div>
+   </div>
+
+   <div class="stat">
+    <div class="stat-value">
+     ${mean(oddCount).toFixed(2)}
+    </div>
+    <div class="stat-label">
+     Average Odd Balls
+    </div>
+   </div>
+
+   <div class="stat">
+    <div class="stat-value">
+     ${Math.round(
+      mean(
+       data.map(
+        d=>d.white.filter(
+         n=>n>=36
+        ).length
+       )
+      )
+     )}
+    </div>
+    <div class="stat-label">
+     Avg High Balls
+    </div>
+   </div>
+
+  </div>
+
+  <h3>🔥 Hot White Numbers</h3>
+  ${numberStatsHtml(hot,c)}
+
+  <h3>❄️ Cold White Numbers</h3>
+  ${numberStatsHtml(cold,c)}
+
+ </div>
+ `;
+}
+
+function numberStatsHtml(
+ nums,
+ c
+){
+
+ return `
+ <div class="balls">
+  ${nums.map(
+   n=>`
+   <span
+    class="ball"
+    title="${c[n]} appearances"
+   >${n}</span>
+   `
+  ).join("")}
+ </div>
+ `;
+}
+
+function renderPBStats(data){
+
+ const c=countsPB(data);
+
+ const nums=
+  Array.from(
+   {length:25},
+   (_,i)=>i+1
+  );
+
+ const hot=[
+  ...nums
+ ]
+ .sort(
+  (a,b)=>c[b]-c[a]||a-b
+ )
+ .slice(0,10);
+
+ const cold=[
+  ...nums
+ ]
+ .sort(
+  (a,b)=>c[a]-c[b]||a-b
+ )
+ .slice(0,10);
+
+ const avg=Math.round(
+  mean(
+   data.map(d=>d.pb)
+  )
+ );
+
+ $("statsOutput").innerHTML+=`
+ <div class="stats-subsection">
+
+  <h3>🔴 Mega Ball Statistics</h3>
+
+  <div class="stat-grid">
+
+   <div class="stat">
+    <div class="stat-value">
+     ${avg}
+    </div>
+    <div class="stat-label">
+     Average Mega Ball
+    </div>
+   </div>
+
+  </div>
+
+  <h3>🔥 Hot Mega Balls</h3>
+
+  <div class="balls">
+   ${hot.map(
+    n=>`
+    <span
+     class="ball pb"
+     title="${c[n]} appearances"
+    >${n}</span>
+    `
+   ).join("")}
+  </div>
+
+  <h3>❄️ Cold Mega Balls</h3>
+
+  <div class="balls">
+   ${cold.map(
+    n=>`
+    <span
+     class="ball pb"
+     title="${c[n]} appearances"
+    >${n}</span>
+    `
+   ).join("")}
+  </div>
+
+  <p class="section-note">
+   Historical Mega Ball statistics include Mega Ball 25
+   from the previous Mega Millions game. New tickets use
+   Mega Balls 1–24.
+  </p>
+
+ </div>
+ `;
+}
+
+function strategyName(key){
+
+ const map={
+  random:"Random",
+  balanced:"Balanced Odd / Even",
+  hot:"Hot Numbers",
+  cold:"Cold Numbers",
+  hotcold:"Hot + Cold Mix",
+  spread:"Good Spread",
+  weighted:"Weighted Frequency",
+  weightedBalanced:"Weighted + Balanced",
+  lowhigh:"Low + High Mix",
+  recency:"Recency",
+  hybrid:"Hybrid AI",
+  overdue:"Overdue Numbers",
+  decades:"Decade Spread",
+  sum:"Sum Balanced",
+  pair:"Pair Boost"
+ };
+
+ return map[key]||key;
+}
+
+let currentGenerated=[];
+
+function renderGenerated(){
+
+ const target=
+  $("generatedTickets");
+
+ if(!currentGenerated.length){
+  target.innerHTML="";
+  return;
+ }
+
+ target.innerHTML=
+  currentGenerated.map(
+   (t,i)=>`
+
+   <div class="ticket">
+
+    <div class="ticket-top">
+
+     <div class="ticket-title">
+      Ticket ${i+1}
+     </div>
+
+     <div class="ticket-actions">
+
+      <button
+       onclick="copyGenerated(${i})"
+      >
+       Copy
+      </button>
+
+      <button
+       class="save-btn"
+       onclick="saveGenerated(${i})"
+      >
+       Save
+      </button>
+
+     </div>
+    </div>
+
+    <div class="ticket-balls">
+
+     ${t.white.map(
+      n=>`
+      <span class="ball">
+       ${n}
+      </span>
+      `
+     ).join("")}
+
+     <span class="ball pb">
+      ${t.pb}
+     </span>
+
+    </div>
+
+   </div>
+  `
+  ).join("");
+}
+
+function getStrategyData(){
+
+ const value=
+  $("strategyWindow").value;
+
+ if(value==="all"){
+  return [...history];
+ }
+
+ const count=
+  Number(value);
+
+ return count>0
+  ? history.slice(-count)
+  : [...history];
+}
+
+function generateTickets(
+ strategy=null
+){
+
+ if(!strategy){
+  strategy=
+   $("strategy").value;
+ }
+
+ const count=Math.min(
+  20,
+  Math.max(
+   1,
+   Number(
+    $("ticketCount").value
+   )
+  )
+ );
+
+ const strategyData=
+  getStrategyData();
+
+ /*
+   IMPORTANT:
+   Generation does not depend on Worker.
+   This makes the Generate button work
+   even if the Worker is offline.
+ */
+ if(!strategyData.length){
+
+  showToast(
+   "No historical data available"
+  );
+
+  return;
+ }
+
+ currentGenerated=[];
+
+ const used=new Set();
+
+ let attempts=0;
+
+ while(
+  currentGenerated.length<count &&
+  attempts<500
+ ){
+
+  const ticket=
+   generateTicket(
+    strategy,
+    strategyData
+   );
+
+  const key=
+   ticket.white.join(",")+
+   "|"+
+   ticket.pb;
+
+  if(!used.has(key)){
+   used.add(key);
+   currentGenerated.push(
+    ticket
+   );
+  }
+
+  attempts++;
+ }
+
+ renderGenerated();
+
+ showToast(
+  `${currentGenerated.length} ticket${
+   currentGenerated.length===1
+    ?""
+    :"s"
+  } generated using ${
+   strategyData.length
+  } drawings`
+ );
+}
+
+function ticketText(t){
+
+ return `${t.white.join(
+  " - "
+ )} | Mega Ball ${t.pb}`;
+}
+
+async function copyText(text){
+
+ try{
+
+  await navigator.clipboard.writeText(
+   text
+  );
+
+  showToast(
+   "Copied to clipboard"
+  );
+
+  return;
+
+ }catch(e){}
+
+ const ta=
+  document.createElement(
+   "textarea"
+  );
+
+ ta.value=text;
+ ta.style.position="fixed";
+ ta.style.opacity="0";
+
+ document.body.appendChild(ta);
+
+ ta.select();
+
+ try{
+
+  document.execCommand(
+   "copy"
+  );
+
+  showToast(
+   "Copied to clipboard"
+  );
+
+ }catch(e){
+
+  showToast(
+   "Copy failed"
+  );
+ }
+
+ ta.remove();
+}
+
+window.copyGenerated=
+ function(index){
+
+  const t=
+   currentGenerated[index];
+
+  if(t){
+   copyText(
+    ticketText(t)
+   );
+  }
+ };
+
+function saveTicket(
+ ticket,
+ source="Generated"
+){
+
+ if(!ticket) return;
+
+ const entry={
+  id:
+   Date.now()+
+   "_"+
+   Math.random()
+    .toString(36)
+    .slice(2),
+
+  white:[
+   ...ticket.white
+  ].sort((a,b)=>a-b),
+
+  pb:Number(ticket.pb),
+
+  name:
+   `Saved #${
+    savedNumbers.length+1
+   }`,
+
+  source,
+
+  createdAt:
+   new Date().toISOString()
+ };
+
+ savedNumbers.unshift(
+  entry
+ );
+
+ saveSaved();
+ renderSaved();
+
+ showToast(
+  "Numbers saved"
+ );
+}
+
+window.saveGenerated=
+ function(index){
+
+  const t=
+   currentGenerated[index];
+
+  if(t){
+   saveTicket(
+    t,
+    "Generated"
+   );
+  }
+ };
+
+function getManualTicket(){
+
+ const white=[
+  $("m1").value,
+  $("m2").value,
+  $("m3").value,
+  $("m4").value,
+  $("m5").value
+ ].map(Number);
+
+ const pb=
+  Number(
+   $("mpb").value
+  );
+
+ if(
+  white.some(
+   n=>
+    !Number.isInteger(n)||
+    n<1||
+    n>70
+  )
+ ){
+
+  showToast(
+   "Enter 5 valid white numbers from 1–70"
+  );
+
+  return null;
+ }
+
+ if(
+  new Set(white).size!==5
+ ){
+
+  showToast(
+   "White numbers must be unique"
+  );
+
+  return null;
+ }
+
+ if(
+  !Number.isInteger(pb)||
+  pb<1||
+  pb>24
+ ){
+
+  showToast(
+   "Mega Ball must be from 1–24"
+  );
+
+  return null;
+ }
+
+ return {
+  white:white.sort(
+   (a,b)=>a-b
+  ),
+  pb
+ };
+}
+
+function clearManual(){
+
+ [
+  "m1",
+  "m2",
+  "m3",
+  "m4",
+  "m5",
+  "mpb"
+ ].forEach(id=>{
+  $(id).value="";
+ });
+}
+
+function renderSaved(){
+
+ const target=
+  $("savedNumbers");
+
+ if(!savedNumbers.length){
+
+  target.innerHTML=
+   `<div class="empty">
+    No saved numbers yet.
+   </div>`;
+
+  return;
+ }
+
+ target.innerHTML=
+  savedNumbers.map(
+   (s,i)=>`
+
+   <div class="saved-ticket">
+
+    <div class="saved-head">
+
+     <div>
+
+      <div class="saved-name">
+       ${escapeHtml(
+        s.name||
+        `Saved #${i+1}`
+       )}
+      </div>
+
+      <div class="saved-meta">
+       ${escapeHtml(
+        s.source||
+        "Saved"
+       )}
+       ${
+        s.createdAt
+         ?" • "+
+          escapeHtml(
+           new Date(
+            s.createdAt
+           ).toLocaleString()
+          )
+         :""
+       }
+      </div>
+
+     </div>
+    </div>
+
+    <div class="saved-edit-grid">
+
+     ${s.white.map(
+      (n,j)=>`
+      <input
+       id="saved_${i}_${j}"
+       type="number"
+       min="1"
+       max="70"
+       value="${n}"
+       aria-label="Saved ticket ${
+        i+1
+       } white number ${
+        j+1
+       }"
+      >
+      `
+     ).join("")}
+
+     <input
+      id="saved_${i}_pb"
+      class="pb-edit"
+      type="number"
+      min="1"
+      max="24"
+      value="${s.pb}"
+      aria-label="Saved ticket ${
+       i+1
+      } Mega Ball"
+     >
+
+    </div>
+
+    <div class="saved-actions">
+
+     <button
+      class="update"
+      onclick="updateSaved(${i})"
+     >
+      Update
+     </button>
+
+     <button
+      onclick="copySaved(${i})"
+     >
+      Copy
+     </button>
+
+     <button
+      class="delete"
+      onclick="deleteSaved(${i})"
+     >
+      Delete
+     </button>
+
+    </div>
+
+   </div>
+  `
+  ).join("");
+} window.updateSaved=
+function(index){
+
+ const s=
+  savedNumbers[index];
+
+ if(!s) return;
+
+ const white=[];
+
+ for(
+  let j=0;
+  j<5;
+  j++
+ ){
+
+  const value=
+   Number(
+    $(
+     `saved_${index}_${j}`
+    ).value
+   );
+
+  if(
+   !Number.isInteger(value)||
+   value<1||
+   value>70
+  ){
+
+   showToast(
+    "White numbers must be from 1–70"
+   );
+
+   return;
+  }
+
+  white.push(value);
+ }
+
+ if(
+  new Set(white).size!==5
+ ){
+
+  showToast(
+   "White numbers must be unique"
+  );
+
+  return;
+ }
+
+ const pb=
+  Number(
+   $(
+    `saved_${index}_pb`
+   ).value
+  );
+
+ if(
+  !Number.isInteger(pb)||
+  pb<1||
+  pb>24
+ ){
+
+  showToast(
+   "Mega Ball must be from 1–24"
+  );
+
+  return;
+ }
+
+ s.white=
+  white.sort(
+   (a,b)=>a-b
+  );
+
+ s.pb=pb;
+
+ s.editedAt=
+  new Date().toISOString();
+
+ saveSaved();
+ renderSaved();
+
+ showToast(
+  "Saved numbers updated"
+ );
+};
+
+window.copySaved=
+function(index){
+
+ const s=
+  savedNumbers[index];
+
+ if(s){
+  copyText(
+   ticketText(s)
+  );
+ }
+};
+
+window.loadSaved=
+function(index){
+
+ const s=
+  savedNumbers[index];
+
+ if(!s) return;
+
+ $("m1").value=
+  s.white[0];
+
+ $("m2").value=
+  s.white[1];
+
+ $("m3").value=
+  s.white[2];
+
+ $("m4").value=
+  s.white[3];
+
+ $("m5").value=
+  s.white[4];
+
+ $("mpb").value=
+  s.pb;
+
+ savedNumbers.splice(
+  index,
+  1
+ );
+
+ saveSaved();
+ renderSaved();
+
+ window.scrollTo({
+  top:
+   $("mpb").getBoundingClientRect()
+    .top+
+   window.scrollY-
+   100,
+  behavior:"smooth"
+ });
+
+ showToast(
+  "Loaded into manual entry. Save when finished."
+ );
+};
+
+window.deleteSaved=
+function(index){
+
+ if(!savedNumbers[index])
+  return;
+
+ if(
+  !confirm(
+   "Delete this saved number set?"
+  )
+ ){
+  return;
+ }
+
+ savedNumbers.splice(
+  index,
+  1
+ );
+
+ saveSaved();
+ renderSaved();
+
+ showToast(
+  "Saved numbers deleted"
+ );
+};
+
+function setSyncStatus(
+ message,
+ type=""
+){
+
+ const el=
+  $("syncStatus");
+
+ el.textContent=
+  message;
+
+ el.className=
+  "status "+type;
+}
+
+function updateHeader(data){
+
+ if(
+  data.jackpot!==undefined
+ ){
+
+  $("jackpot").textContent=
+   formatMoney(
+    data.jackpot
+   );
+ }
+
+ if(
+  data.cashValue!==undefined
+ ){
+
+  $("cashValue").textContent=
+   "Cash Value: "+
+   formatMoney(
+    data.cashValue
+   );
+ }
+
+ if(data.nextDrawing){
+
+  $("nextDrawing").textContent=
+   "Next Drawing: "+
+   formatDrawingDate(
+    data.nextDrawing
+   );
+ }
+
+ if(
+  data.ticketCost||
+  data.ticket_cost
+ ){
+
+  $("ticketCost").textContent=
+   "Ticket Cost: "+
+   (
+    data.ticketCost||
+    data.ticket_cost
+   );
+ }
+}
+
+async function updateFromWorker(
+ reason="manual"
+){
+
+ if(updateInProgress)
+  return;
+
+ const url=
+  (settings.workerUrl||"")
+   .trim();
+
+ if(!url){
+
+  setSyncStatus(
+   "Worker URL not configured. Showing local historical data.",
+   "error"
+  );
+
+  $("updateMessage").textContent=
+   "Enter your Mega Millions Cloudflare Worker URL above.";
+
+  return;
+ }
+
+ updateInProgress=true;
+
+ setSyncStatus(
+  "Updating Mega Millions data…"
+ );
+
+ $("updateMessage").textContent=
+  "Connecting to Cloudflare Worker…";
+
+ try{
+
+  const response=
+   await fetch(
+    url,
+    {
+     method:"GET",
+     cache:"no-store"
+    }
+   );
+
+  if(!response.ok){
+
+   throw new Error(
+    "Worker returned HTTP "+
+    response.status
+   );
+  }
+
+  const data=
+   await response.json();
+
+  if(
+   !data||
+   !Array.isArray(data.draws)
+  ){
+
+   throw new Error(
+    "Invalid Worker response"
+   );
+  }
+
+  const incoming=
+   normalizeHistory(
+    data.draws
+   );
+
+  if(incoming.length){
+
+   history=
+    normalizeHistory([
+     ...history,
+     ...incoming
+    ]);
+
+   saveHistory();
+  }
+
+  updateHeader(data);
+
+  lastSyncTime=
+   Date.now();
+
+  setSyncStatus(
+   "Updated successfully • "+
+   new Date().toLocaleTimeString(),
+   "ok"
+  );
+
+  $("updateMessage").textContent=
+   "Last successful update: "+
+   new Date().toLocaleString()+
+   " • "+
+   incoming.length+
+   " valid drawings received.";
+
+  renderLatest();
+  renderStatistics();
+
+  showToast(
+   reason==="open"
+    ? "Mega Millions data updated"
+    : "Mega Millions data refreshed"
+  );
+
+ }catch(error){
+
+  console.error(error);
+
+  setSyncStatus(
+   "Update failed. Local historical data is still available.",
+   "error"
+  );
+
+  $("updateMessage").textContent=
+   "Update error: "+
+   error.message;
+
+  showToast(
+   "Automatic update failed"
+  );
+
+ }finally{
+
+  updateInProgress=false;
+ }
+}
+
+function automaticOpenUpdate(){
+
+ if(
+  settings.updateOnOpen!==false
+ ){
+
+  updateFromWorker(
+   "open"
+  );
+ }
+}
+
+document.addEventListener(
+ "visibilitychange",
+ ()=>{
+  if(
+   document.visibilityState==="visible"&&
+   settings.updateOnOpen!==false
+  ){
+
+   if(
+    Date.now()-lastSyncTime>
+    60000
+   ){
+
+    updateFromWorker(
+     "foreground"
+    );
+   }
+  }
+ }
+);
+
+window.addEventListener(
+ "pageshow",
+ ()=>{
+  if(
+   settings.updateOnOpen!==false&&
+   Date.now()-lastSyncTime>
+   60000
+  ){
+
+   updateFromWorker(
+    "open"
+   );
+  }
+ }
+);
+
+const BACKTEST_STRATEGIES=[
+ "random",
+ "balanced",
+ "hot",
+ "cold",
+ "hotcold",
+ "spread",
+ "weighted",
+ "weightedBalanced",
+ "lowhigh",
+ "recency",
+ "hybrid",
+ "overdue",
+ "decades",
+ "sum",
+ "pair"
+];
+
+function seededRandom(seed){
+
+ let s=seed>>>0;
+
+ return function(){
+
+  s+=0x6D2B79F5;
+
+  let t=s;
+
+  t=Math.imul(
+   t^t>>>15,
+   t|1
+  );
+
+  t^=
+   t+
+   Math.imul(
+    t^t>>>7,
+    t|61
+   );
+
+  return(
+   (t^t>>>14)>>>0
+  )/4294967296;
+ };
+}
+
+function scoreTicket(
+ ticket,
+ target
+){
+
+ const whiteHits=
+  ticket.white.filter(
+   n=>target.white.includes(n)
+  ).length;
+
+ const pbHit=
+  ticket.pb===target.pb;
+
+ return {
+  whiteHits,
+  pbHit
+ };
+}
+
+function emptyMetrics(){
+
+ return {
+  tests:0,
+  whiteTotal:0,
+  pbHits:0,
+  threePlus:0,
+  fourPlus:0,
+  five:0,
+  fivePB:0
+ };
+}
+
+function addMetrics(
+ metrics,
+ score
+){
+
+ metrics.tests++;
+
+ metrics.whiteTotal+=
+  score.whiteHits;
+
+ if(score.pbHit)
+  metrics.pbHits++;
+
+ if(score.whiteHits>=3)
+  metrics.threePlus++;
+
+ if(score.whiteHits>=4)
+  metrics.fourPlus++;
+
+ if(score.whiteHits===5)
+  metrics.five++;
+
+ if(
+  score.whiteHits===5&&
+  score.pbHit
+ ){
+  metrics.fivePB++;
+ }
+}
+
+function pct(n,d){
+
+ if(!d)
+  return "0.00%";
+
+ return(
+  (n/d)*100
+ ).toFixed(2)+"%";
+}
+
+async function runBacktest(){
+
+ if(history.length<2){
+
+  showToast(
+   "Not enough historical data"
+  );
+
+  return;
+ }
+
+ const minTraining=
+  Number(
+   $("minTraining").value
+  );
+
+ const recencyWindow=
+  Number(
+   $("recencyWindow").value
+  );
+
+ const ordered=[
+  ...history
+ ]
+ .sort(
+  (a,b)=>
+   a.date.localeCompare(b.date)
+ );
+
+ if(
+  ordered.length<=minTraining
+ ){
+
+  showToast(
+   "Need more draws than the minimum training setting"
+  );
+
+  return;
+ }
+
+ const metrics={};
+
+ BACKTEST_STRATEGIES.forEach(
+  s=>{
+   metrics[s]=
+    emptyMetrics();
+  }
+ );
+
+ const totalTests=
+  (ordered.length-minTraining)*
+  BACKTEST_STRATEGIES.length;
+
+ let completed=0;
+
+ $("progressArea").style.display=
+  "block";
+
+ $("progressBar").style.width=
+  "0%";
+
+ $("progressText").textContent=
+  "Starting…";
+
+ $("backtestBtn").disabled=
+  true;
+
+ for(
+  let targetIndex=minTraining;
+  targetIndex<ordered.length;
+  targetIndex++
+ ){
+
+  const target=
+   ordered[targetIndex];
+
+  let training=
+   ordered.slice(
+    0,
+    targetIndex
+   );
+
+  if(
+   recencyWindow>0&&
+   training.length>recencyWindow
+  ){
+
+   training=
+    training.slice(
+     -recencyWindow
+    );
+  }
+
+  for(
+   let strategyIndex=0;
+   strategyIndex<
+    BACKTEST_STRATEGIES.length;
+   strategyIndex++
+  ){
+
+   const strategy=
+    BACKTEST_STRATEGIES[
+     strategyIndex
+    ];
+
+   const seed=
+    targetIndex*100003+
+    strategyIndex*7919+
+    12345;
+
+   const rng=
+    seededRandom(seed);
+
+   const ticket=
+    generateTicket(
+     strategy,
+     training,
+     rng
+    );
+
+   const score=
+    scoreTicket(
+     ticket,
+     target
+    );
+
+   addMetrics(
+    metrics[strategy],
+    score
+   );
+
+   completed++;
+
+   if(
+    completed%20===0
+   ){
+
+    const progress=
+     Math.round(
+      completed/
+      totalTests*
+      100
+     );
+
+    $("progressBar").style.width=
+     progress+"%";
+
+    $("progressText").textContent=
+     `Testing ${
+      completed.toLocaleString()
+     } / ${
+      totalTests.toLocaleString()
+     } (${progress}%)`;
+
+    await new Promise(
+     resolve=>
+      setTimeout(
+       resolve,
+       0
+      )
+    );
+   }
+  }
+ }
+
+ $("progressBar").style.width=
+  "100%";
+
+ $("progressText").textContent=
+  "Backtest complete.";
+
+ renderBacktest(
+  metrics
+ );
+
+ $("backtestBtn").disabled=
+  false;
+}
+
+function renderBacktest(
+ metrics
+){
+
+ const rows=
+  BACKTEST_STRATEGIES.map(
+   strategy=>{
+
+    const m=
+     metrics[strategy];
+
+    return `
+    <tr>
+
+     <td>
+      ${escapeHtml(
+       strategyName(strategy)
+      )}
+     </td>
+
+     <td>
+      ${m.tests}
+     </td>
+
+     <td>
+      ${
+       m.tests
+        ? (
+          m.whiteTotal/
+          m.tests
+         ).toFixed(2)
+        :"0.00"
+      }
+     </td>
+
+     <td>
+      ${pct(
+       m.pbHits,
+       m.tests
+      )}
+     </td>
+
+     <td>
+      ${pct(
+       m.threePlus,
+       m.tests
+      )}
+     </td>
+
+     <td>
+      ${pct(
+       m.fourPlus,
+       m.tests
+      )}
+     </td>
+
+     <td>
+      ${pct(
+       m.five,
+       m.tests
+      )}
+     </td>
+
+     <td>
+      ${pct(
+       m.fivePB,
+       m.tests
+      )}
+     </td>
+
+    </tr>
+    `;
+   }
+  ).join("");
+
+ $("backtestOutput").innerHTML=`
+
+ <h3>Walk-Forward Results</h3>
+
+ <div class="table-wrap">
+
+  <table>
+
+   <thead>
+    <tr>
+     <th>Strategy</th>
+     <th>Tests</th>
+     <th>Avg White</th>
+     <th>MB Hit</th>
+     <th>3+ White</th>
+     <th>4+ White</th>
+     <th>5 White</th>
+     <th>5+MB</th>
+    </tr>
+   </thead>
+
+   <tbody>
+    ${rows}
+   </tbody>
+
+  </table>
+
+ </div>
+
+ <p class="section-note">
+  Backtest uses only historical drawings available before
+  each target drawing. Random components use deterministic
+  seeds so the results are reproducible. These statistics
+  describe past performance only.
+ </p>
+ `;
+}
+
+function downloadFile(
+ filename,
+ content,
+ type
+){
+
+ const blob=
+  new Blob(
+   [content],
+   {type}
+  );
+
+ const url=
+  URL.createObjectURL(
+   blob
+  );
+
+ const a=
+  document.createElement(
+   "a"
+  );
+
+ a.href=url;
+ a.download=filename;
+
+ document.body.appendChild(a);
+
+ a.click();
+
+ a.remove();
+
+ URL.revokeObjectURL(url);
+}
+
+function exportCSV(){
+
+ const lines=[
+  "Date,White1,White2,White3,White4,White5,MegaBall"
+ ];
+
+ history.forEach(d=>{
+
+  lines.push([
+   d.date,
+   ...d.white,
+   d.pb
+  ].join(","));
+
+ });
+
+ downloadFile(
+  "mega-millions-history-v6.csv",
+  lines.join("\n"),
+  "text/csv"
+ );
+
+ showToast(
+  "CSV exported"
+ );
+}
+
+function exportJSON(){
+
+ const payload={
+  version:"6.0",
+  exportedAt:
+   new Date().toISOString(),
+  draws:history,
+  savedNumbers:savedNumbers,
+  settings:{
+   workerUrl:
+    settings.workerUrl,
+   updateOnOpen:
+    settings.updateOnOpen
+  }
+ };
+
+ downloadFile(
+  "mega-millions-ai-lab-v6.json",
+  JSON.stringify(
+   payload,
+   null,
+   2
+  ),
+  "application/json"
+ );
+
+ showToast(
+  "JSON exported"
+ );
+}
+
+function parseCSV(text){
+
+ const lines=
+  text
+   .replace(/\r/g,"")
+   .split("\n")
+   .map(x=>x.trim())
+   .filter(Boolean);
+
+ if(lines.length<2){
+
+  throw new Error(
+   "CSV contains no data"
+  );
+ }
+
+ const result=[];
+
+ for(
+  let i=1;
+  i<lines.length;
+  i++
+ ){
+
+  const parts=
+   lines[i].split(",");
+
+  if(parts.length<7)
+   continue;
+
+  const d=
+   normalizeDraw({
+    date:parts[0],
+
+    white:[
+     Number(parts[1]),
+     Number(parts[2]),
+     Number(parts[3]),
+     Number(parts[4]),
+     Number(parts[5])
+    ],
+
+    pb:Number(parts[6])
+   });
+
+  if(d){
+   result.push(d);
+  }
+ }
+
+ return result;
+}
+
+function resetDatabase(){
+
+ if(
+  !confirm(
+   "Reset the historical Mega Millions database?\n\n"+
+   "Your saved numbers will NOT be deleted."
+  )
+ ){
+  return;
+ }
+
+ history=
+  normalizeHistory(
+   SEED_DRAWS
+  );
+
+ saveHistory();
+
+ renderLatest();
+ renderStatistics();
+
+ $("backtestOutput").innerHTML="";
+
+ showToast(
+  "Historical database reset"
+ );
+}
+
+
+/* ============================================================
+   EVENT LISTENERS
+   ============================================================ */
+
+$("generateBtn").addEventListener(
+ "click",
+ ()=>generateTickets()
+);
+
+$("strategyWindow").addEventListener(
+ "change",
+ ()=>{
+  settings.strategyWindow=
+   $("strategyWindow").value;
+
+  safeSet(
+   SETTINGS_KEY,
+   settings
+  );
+ }
+);
+
+$("latestCount").addEventListener(
+ "change",
+ ()=>{
+  settings.latestCount=
+   $("latestCount").value;
+
+  safeSet(
+   SETTINGS_KEY,
+   settings
+  );
+
+  renderLatest();
+ }
+);
+
+$("statsWindow").addEventListener(
+ "change",
+ renderStatistics
+);
+
+$("backtestBtn").addEventListener(
+ "click",
+ runBacktest
+);
+
+$("saveManualBtn").addEventListener(
+ "click",
+ ()=>{
+  const ticket=
+   getManualTicket();
+
+  if(ticket){
+
+   saveTicket(
+    ticket,
+    "Manual"
+   );
+
+   clearManual();
+  }
+ }
+);
+
+$("clearManualBtn").addEventListener(
+ "click",
+ clearManual
+);
+
+$("saveSettingsBtn").addEventListener(
+ "click",
+ ()=>{
+  saveSettings();
+
+  showToast(
+   "Settings saved"
+  );
+
+  if(settings.workerUrl){
+   updateFromWorker(
+    "manual"
+   );
+  }
+ }
+);
+
+$("updateNowBtn").addEventListener(
+ "click",
+ ()=>{
+  saveSettings();
+
+  updateFromWorker(
+   "manual"
+  );
+ }
+);
+
+$("refreshBtn").addEventListener(
+ "click",
+ ()=>{
+  saveSettings();
+
+  updateFromWorker(
+   "manual"
+  );
+ }
+);
+
+$("csvFile").addEventListener(
+ "change",
+ async event=>{
+
+  const file=
+   event.target.files[0];
+
+  if(!file) return;
+
+  try{
+
+   const text=
+    await file.text();
+
+   const imported=
+    parseCSV(text);
+
+   if(!imported.length){
+
+    throw new Error(
+     "No valid Mega Millions rows found"
+    );
+   }
+
+   history=
+    normalizeHistory([
+     ...history,
+     ...imported
+    ]);
+
+   saveHistory();
+
+   renderLatest();
+   renderStatistics();
+
+   showToast(
+    `${imported.length} drawing${
+     imported.length===1
+      ?""
+      :"s"
+    } imported`
+   );
+
+  }catch(error){
+
+   console.error(error);
+
+   showToast(
+    "CSV import failed: "+
+    error.message
+   );
+
+  }finally{
+
+   event.target.value="";
+  }
+ }
+);
+
+$("exportCsvBtn").addEventListener(
+ "click",
+ exportCSV
+);
+
+$("exportJsonBtn").addEventListener(
+ "click",
+ exportJSON
+);
+
+$("resetDbBtn").addEventListener(
+ "click",
+ resetDatabase
+);
+
+
+/* ============================================================
+   INITIALIZATION
+   ============================================================ */
+
+function init(){
+
+ loadData();
+
+ renderLatest();
+
+ renderSaved();
+
+ renderStatistics();
+
+ automaticOpenUpdate();
+}
+
+document.addEventListener(
+ "DOMContentLoaded",
+ init
+);
+
+</script>
+</body>
+</html>
